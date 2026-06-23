@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Navigating AI & Digital Safety With Confidence — an interactive escape room game about scam prevention and AI awareness." />
+  <title>Cyber Escape: Navigating AI &amp; Digital Safety</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <!-- Animated background -->
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-glow" aria-hidden="true"></div>
+
+  <main id="app">
+
+    <!-- ============ SCREEN: WELCOME ============ -->
+    <section class="screen active" id="screen-welcome">
+      <div class="card hero">
+        <div class="badge">🛡️ Digital Safety Roadshow</div>
+        <h1 class="title-glow">CYBER ESCAPE</h1>
+        <p class="subtitle">Navigating AI &amp; Digital Safety With Confidence</p>
+        <p class="lede">
+          You are locked inside <strong>The Digital Vault</strong>. Five doors stand between you and freedom —
+          and each one is guarded by a scammer's trick or an AI trap. Spot the danger, pick the safe choice,
+          and unlock your way out. Can you escape before the clock runs out?
+        </p>
+        <button class="btn btn-primary btn-lg" id="btn-begin">Enter the Vault →</button>
+        <p class="fineprint">Free to play • Suitable for all ages • Learn while you play</p>
+      </div>
+    </section>
+
+    <!-- ============ SCREEN: REGISTRATION ============ -->
+    <section class="screen" id="screen-register">
+      <div class="card">
+        <h2 class="section-title">👤 Player Registration</h2>
+        <p class="muted">We collect a few details so the organisers can follow up with safety tips and contact prize winners. Your information is kept private.</p>
+        <form id="register-form" novalidate>
+          <div class="form-grid">
+            <label class="field">
+              <span>Full Name <i>*</i></span>
+              <input type="text" name="fullName" autocomplete="name" required />
+            </label>
+            <label class="field">
+              <span>Email <i>*</i></span>
+              <input type="email" name="email" autocomplete="email" required />
+            </label>
+            <label class="field">
+              <span>Contact Number <i>*</i></span>
+              <input type="tel" name="contact" inputmode="tel" autocomplete="tel" required />
+            </label>
+            <label class="field">
+              <span>Last 4 digits of NRIC/FIN <i>*</i></span>
+              <input type="text" name="nric4" inputmode="numeric" maxlength="4" pattern="[A-Za-z0-9]{4}" placeholder="e.g. 123A" required />
+            </label>
+            <label class="field">
+              <span>Gender <i>*</i></span>
+              <select name="gender" required>
+                <option value="">Select…</option>
+                <option>Male</option>
+                <option>Female</option>
+                <option>Prefer not to say</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Occupation <i>*</i></span>
+              <input type="text" name="occupation" autocomplete="organization-title" required />
+            </label>
+            <label class="field field-wide">
+              <span>Which group best describes you? <i>*</i></span>
+              <select name="ageGroup" required>
+                <option value="">Select…</option>
+                <option>Children (≤12 years)</option>
+                <option>Youth (13–25 years)</option>
+                <option>Adults (26–59 years)</option>
+                <option>Seniors (≥60 years)</option>
+                <option>Persons with Disabilities</option>
+              </select>
+            </label>
+          </div>
+          <label class="checkbox">
+            <input type="checkbox" name="consent" required />
+            <span>I consent to the organisers collecting and using the information above for this event and follow-up. <i>*</i></span>
+          </label>
+          <p class="form-error" id="register-error" hidden></p>
+          <div class="actions">
+            <button type="button" class="btn btn-ghost" data-goto="welcome">← Back</button>
+            <button type="submit" class="btn btn-primary">Continue →</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ============ SCREEN: LEVEL SELECT ============ -->
+    <section class="screen" id="screen-level">
+      <div class="card">
+        <h2 class="section-title">🎚️ Choose Your Challenge</h2>
+        <p class="muted">Same vault, two difficulty modes. Pick the one that suits you.</p>
+        <div class="level-grid">
+          <button class="level-card" data-level="easy">
+            <div class="level-icon">🌱</div>
+            <h3>Easy Mode</h3>
+            <p class="level-tag">Kids &amp; Seniors</p>
+            <p>Friendly, everyday scam scenarios with helpful hints. 10 puzzles, gentle pace.</p>
+            <span class="level-cta">Start Easy →</span>
+          </button>
+          <button class="level-card" data-level="normal">
+            <div class="level-icon">⚡</div>
+            <h3>Normal Mode</h3>
+            <p class="level-tag">PMET / Working Adults</p>
+            <p>Trickier, workplace-grade threats: deepfakes, BEC, AI data risks. 10 puzzles.</p>
+            <span class="level-cta">Start Normal →</span>
+          </button>
+        </div>
+        <div class="actions">
+          <button type="button" class="btn btn-ghost" data-goto="register">← Back</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SCREEN: GAME ============ -->
+    <section class="screen" id="screen-game">
+      <div class="game-hud">
+        <div class="hud-item">
+          <span class="hud-label">Door</span>
+          <span class="hud-value"><span id="q-current">1</span>/<span id="q-total">10</span></span>
+        </div>
+        <div class="hud-progress">
+          <div class="hud-progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="hud-item">
+          <span class="hud-label">⏱ Time</span>
+          <span class="hud-value" id="timer">00:00</span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-label">🔓 Unlocked</span>
+          <span class="hud-value"><span id="score">0</span></span>
+        </div>
+      </div>
+
+      <div class="card game-card">
+        <div class="room-name" id="room-name">The Phishing Inbox</div>
+        <div class="lock-row" id="lock-row" aria-hidden="true"></div>
+        <h2 class="question-text" id="question-text">Question goes here</h2>
+        <div class="options" id="options"></div>
+
+        <div class="feedback" id="feedback" hidden>
+          <div class="feedback-head" id="feedback-head"></div>
+          <p class="feedback-body" id="feedback-body"></p>
+          <button class="btn btn-primary" id="btn-next">Next Door →</button>
+        </div>
+
+        <div class="game-foot">
+          <button class="btn btn-ghost btn-sm" id="btn-hint">💡 Hint</button>
+          <p class="hint-text" id="hint-text" hidden></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SCREEN: RESULT ============ -->
+    <section class="screen" id="screen-result">
+      <div class="card hero">
+        <div class="result-emoji" id="result-emoji">🎉</div>
+        <h2 class="title-glow" id="result-title">You Escaped!</h2>
+        <p class="lede" id="result-lede"></p>
+        <div class="result-stats">
+          <div class="stat"><span class="stat-num" id="stat-score">0/10</span><span class="stat-label">Doors Unlocked</span></div>
+          <div class="stat"><span class="stat-num" id="stat-time">00:00</span><span class="stat-label">Time Taken</span></div>
+          <div class="stat"><span class="stat-num" id="stat-level">Easy</span><span class="stat-label">Mode</span></div>
+        </div>
+        <button class="btn btn-primary btn-lg" id="btn-to-feedback">Give Feedback →</button>
+      </div>
+    </section>
+
+    <!-- ============ SCREEN: FEEDBACK ============ -->
+    <section class="screen" id="screen-feedback">
+      <div class="card">
+        <h2 class="section-title">💬 Quick Feedback</h2>
+        <p class="muted">Help us improve the game. It takes 20 seconds.</p>
+        <form id="feedback-form" novalidate>
+          <div class="field">
+            <span>How much did you enjoy the game?</span>
+            <div class="rating" id="rating-enjoy" data-name="enjoyment"></div>
+          </div>
+          <div class="field">
+            <span>How much did you learn about staying safe?</span>
+            <div class="rating" id="rating-learn" data-name="learning"></div>
+          </div>
+          <label class="field">
+            <span>How likely are you to recommend this to others?</span>
+            <select name="recommend">
+              <option value="">Select…</option>
+              <option>Very likely</option>
+              <option>Likely</option>
+              <option>Neutral</option>
+              <option>Unlikely</option>
+              <option>Very unlikely</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Any comments or suggestions? (optional)</span>
+            <textarea name="comments" rows="3" placeholder="Tell us what you think…"></textarea>
+          </label>
+          <p class="form-error" id="feedback-error" hidden></p>
+          <div class="actions">
+            <button type="submit" class="btn btn-primary">Submit &amp; Finish →</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ============ SCREEN: THANK YOU ============ -->
+    <section class="screen" id="screen-thanks">
+      <div class="card hero">
+        <div class="result-emoji">🙏</div>
+        <h2 class="title-glow">Thank You!</h2>
+        <p class="lede" id="thanks-status">Your responses have been recorded.</p>
+        <p class="muted">Stay alert, stay safe — and share what you learned with friends and family.</p>
+        <button class="btn btn-primary btn-lg" id="btn-play-again">Play Again (New Player)</button>
+      </div>
+    </section>
+
+    <!-- ============ SCREEN: ADMIN ============ -->
+    <section class="screen" id="screen-admin">
+      <div class="card">
+        <h2 class="section-title">🔐 Organiser Dashboard</h2>
+        <p class="muted">Local backup of submissions stored on this device. Export to CSV to merge with other tablets.</p>
+        <div class="admin-stats" id="admin-stats"></div>
+        <div class="actions admin-actions">
+          <button class="btn btn-primary" id="btn-export-csv">⬇ Export CSV</button>
+          <button class="btn btn-ghost" id="btn-export-json">⬇ Export JSON</button>
+          <button class="btn btn-danger" id="btn-clear-data">🗑 Clear Local Data</button>
+          <button class="btn btn-ghost" data-goto="welcome">← Back to Game</button>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table" id="admin-table"></table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-foot">
+    <span>Cyber Escape • Digital Safety Roadshow</span>
+    <button class="link-btn" id="btn-admin-link">Organiser access</button>
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
