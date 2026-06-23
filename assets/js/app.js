@@ -16,7 +16,7 @@
    Until you do, the game still works fully — data is saved locally and
    can be exported as CSV/JSON from the Organiser dashboard.
 --------------------------------------------------------------------- */
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mgojvvaz";
 
 const STORAGE_KEY = "cyberEscape.submissions.v1";
 
