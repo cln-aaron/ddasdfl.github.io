@@ -2,14 +2,16 @@
 
 An interactive **online escape room** that gamifies learning about **scam prevention and AI awareness**, built for community events and roadshows.
 
-Players are "locked" in *The Digital Vault* and must spot scams and AI traps to unlock 10 doors and escape.
+Players pick an **animal hero**, then travel room-to-room through *The Digital Vault* — meeting a locked-door scam/AI challenge in each themed location and unlocking their way to escape.
 
 ## ✨ Features
 
+- **Roblox-style journey**: choose an animal avatar that walks through 10 themed scenes (Mail Room, Lucky Casino, Hall of Mirrors…), with a level map, bouncy animations, confetti, and sound effects
+- **12 animal avatars** to pick from after sign-up
 - **One game, two difficulty modes**
   - 🌱 **Easy** — designed for *kids & seniors* (everyday scams, gentle pace, hints)
   - ⚡ **Normal** — designed for *PMET / working adults* (deepfakes, BEC, AI data risks)
-- **10 questions per level** (20 total), each a themed "door" with a teaching moment after every answer
+- **10 challenges per level** (20 total), each a themed "door" with a teaching moment after every answer
 - **Participant registration** collecting: Full name, Email, Contact number, last 4 of NRIC/FIN, Gender, Occupation, and age/needs group
 - **Stores every option each participant selects** (which choice, right or wrong) for reporting
 - **Post-game feedback** (enjoyment, learning, recommendation, comments)
@@ -54,10 +56,10 @@ This repo is `ddasdfl.github.io`. In **Settings → Pages**, set the source bran
 ## 📁 Structure
 
 ```
-index.html              Game shell & all screens
-assets/css/style.css    Neon "digital vault" theme
-assets/js/data.js       Question bank (easy + normal) — edit to customise questions
-assets/js/app.js        Game logic, data capture, Formspree + export
+index.html              Game shell & all screens (welcome, sign-up, avatar, level, game, result, feedback, admin)
+assets/css/style.css    Playful Roblox-style theme, scenes & animations
+assets/js/data.js       Avatars, locations (scenes) & question bank — edit to customise
+assets/js/app.js        Game logic, journey/scene engine, sound, data capture, Formspree + export
 ```
 
 ## ✏️ Customising questions

@@ -10,6 +10,43 @@
    - explain:  the teaching moment shown after answering
    ===================================================================== */
 
+/* ---------------------------------------------------------------------
+   AVATARS — players pick an animal character that travels the vault
+--------------------------------------------------------------------- */
+const AVATARS = [
+  { id: "fox",     emoji: "🦊", name: "Finn the Fox",     trait: "Clever & quick" },
+  { id: "owl",     emoji: "🦉", name: "Ollie the Owl",    trait: "Wise watcher" },
+  { id: "cat",     emoji: "🐱", name: "Coco the Cat",     trait: "Curious & careful" },
+  { id: "panda",   emoji: "🐼", name: "Pip the Panda",    trait: "Calm & steady" },
+  { id: "tiger",   emoji: "🐯", name: "Theo the Tiger",   trait: "Brave & bold" },
+  { id: "rabbit",  emoji: "🐰", name: "Ruby the Rabbit",  trait: "Fast thinker" },
+  { id: "monkey",  emoji: "🐵", name: "Milo the Monkey",  trait: "Playful & sharp" },
+  { id: "dog",     emoji: "🐶", name: "Daisy the Dog",    trait: "Loyal & alert" },
+  { id: "koala",   emoji: "🐨", name: "Kai the Koala",    trait: "Cool & collected" },
+  { id: "lion",    emoji: "🦁", name: "Leo the Lion",     trait: "Fearless leader" },
+  { id: "penguin", emoji: "🐧", name: "Percy the Penguin", trait: "Smooth operator" },
+  { id: "frog",    emoji: "🐸", name: "Freddie the Frog", trait: "Leaps to safety" }
+];
+
+/* ---------------------------------------------------------------------
+   LOCATIONS — the 10 themed "rooms" the avatar travels through.
+   Reused for both Easy and Normal (each level has 10 doors).
+   Each room: a name, an emoji icon, a color gradient, and floating
+   decoration emojis to build the scene.
+--------------------------------------------------------------------- */
+const LOCATIONS = [
+  { name: "The Mail Room",       icon: "📧", grad: ["#3a2d6b", "#5b3fa8"], decor: ["✉️","📩","📨","⚠️"] },
+  { name: "The Phone Booth",     icon: "📞", grad: ["#0f4c5c", "#1d8a9e"], decor: ["☎️","📱","🔔","❓"] },
+  { name: "The Link Tunnel",     icon: "🔗", grad: ["#5c1f4a", "#9e2f7a"], decor: ["🔗","📦","🚚","⚠️"] },
+  { name: "The Friendship Park",  icon: "🌳", grad: ["#1f5c2f", "#3a9e4f"], decor: ["🌳","🪑","💬","🤝"] },
+  { name: "The Password Vault",  icon: "🔐", grad: ["#5c4a1f", "#9e842f"], decor: ["🔑","🔒","🗝️","💎"] },
+  { name: "The Wi-Fi Cafe",      icon: "☕", grad: ["#5c2f1f", "#9e552f"], decor: ["☕","📶","💻","🍰"] },
+  { name: "The Lucky Casino",    icon: "🎰", grad: ["#5c1f2f", "#c0392b"], decor: ["🎰","🎟️","💰","🎲"] },
+  { name: "The Computer Lab",    icon: "💻", grad: ["#1f3a5c", "#2f6f9e"], decor: ["💻","🖥️","🐛","⚠️"] },
+  { name: "The Town Square",     icon: "📢", grad: ["#3a1f5c", "#6f2f9e"], decor: ["📢","🏛️","🗣️","📸"] },
+  { name: "The Hall of Mirrors", icon: "🪞", grad: ["#1f5c5c", "#2f9e9e"], decor: ["🪞","🎭","👁️","✨"] }
+];
+
 const QUESTIONS = {
   /* ---------------- EASY: Kids & Seniors ---------------- */
   easy: [
