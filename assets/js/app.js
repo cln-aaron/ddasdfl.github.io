@@ -120,7 +120,11 @@ buildAvatars();
 $("#btn-avatar-next").addEventListener("click", () => { if (state.avatar) { sfx.click(); showScreen("level"); } });
 
 /* ---------- 8) LEVEL SELECT → START ---------- */
-$$(".level-card").forEach(c => c.addEventListener("click", () => { sfx.click(); startGame(c.dataset.level); }));
+$$(".level-card").forEach(c => c.addEventListener("click", () => {
+  sfx.click();
+  try { startGame(c.dataset.level); }
+  catch (e) { showFatal(e); }
+}));
 
 /* =====================================================================
    9) THE WORLD ENGINE
