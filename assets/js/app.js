@@ -34,6 +34,7 @@ function showScreen(name) {
 const fmtTime = t => `${String(Math.floor(t/60)).padStart(2,"0")}:${String(t%60).padStart(2,"0")}`;
 const escapeHtml = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const shuffledIdx = n => { const a = [...Array(n).keys()]; for (let i = n - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 
 /* ---- on-screen error reporter (so device-specific failures are visible) ---- */
 let _errBox = null;
@@ -578,11 +579,14 @@ function openPuzzle(roomIndex) {
   $("#question-text").textContent = q.prompt;
 
   const optWrap = $("#options"); optWrap.innerHTML = "";
-  q.options.forEach((text, i) => {
+  // Randomise option order so the correct answer isn't always in the same spot.
+  const order = shuffledIdx(q.options.length);
+  order.forEach((origIdx, pos) => {
     const btn = document.createElement("button");
     btn.className = "option"; btn.type = "button";
-    btn.innerHTML = `<span class="option-key">${String.fromCharCode(65+i)}</span><span class="option-text">${escapeHtml(text)}</span>`;
-    btn.addEventListener("click", () => answer(i));
+    btn.dataset.orig = origIdx;
+    btn.innerHTML = `<span class="option-key">${String.fromCharCode(65+pos)}</span><span class="option-text">${escapeHtml(q.options[origIdx])}</span>`;
+    btn.addEventListener("click", () => answer(origIdx));
     optWrap.appendChild(btn);
   });
   $("#feedback").hidden = true;
@@ -612,7 +616,11 @@ function answer(choiceIndex) {
   }
 
   const opts = $$("#options .option");
-  opts.forEach((b, i) => { if (i === q.answer) b.classList.add("is-correct"); if (i === choiceIndex && !correct) b.classList.add("is-wrong"); });
+  opts.forEach(b => {
+    const oi = +b.dataset.orig;
+    if (oi === q.answer) b.classList.add("is-correct");
+    if (oi === choiceIndex && !correct) b.classList.add("is-wrong");
+  });
 
   const head = $("#feedback-head"), fb = $("#feedback");
   if (correct) {
