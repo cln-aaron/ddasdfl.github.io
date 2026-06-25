@@ -467,7 +467,13 @@ function loop(now) {
    ===================================================================== */
 function startGame(level) {
   state.level = level;
-  state.questions = QUESTIONS[level].slice(0, 5);   // 5 rooms per level
+  // Curated 5 rooms per level. Each set includes AI-safety question(s) and
+  // maps to rooms: Mail Room, Phone Booth, Link Tunnel, Friendship Park, Hall of Mirrors.
+  const PLAY_SET = {
+    easy:   [0, 1, 2, 3, 9],   // prize, OTP, link, stranger, AI deepfake call (Hall of Mirrors)
+    normal: [0, 1, 3, 8, 9]    // BEC, AI voice-clone, lookalike URL, romance, AI misinformation
+  };
+  state.questions = PLAY_SET[level].map(i => QUESTIONS[level][i]);
   state.score = 0; state.answerMap = {}; state.paused = false; moveTarget = null;
   input.x = 0; input.y = 0;
 
@@ -774,7 +780,7 @@ $("#btn-play-again").addEventListener("click", () => {
 /* =====================================================================
    17) ORGANISER DASHBOARD
    ===================================================================== */
-$("#btn-admin-link").addEventListener("click", openAdmin);
+/* Organiser dashboard is reachable only via the ?admin URL (no visible button). */
 if (new URLSearchParams(location.search).has("admin")) document.addEventListener("DOMContentLoaded", openAdmin);
 function openAdmin() { renderAdmin(); showScreen("admin"); }
 function renderAdmin() {

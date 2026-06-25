@@ -39,12 +39,12 @@ const LOCATIONS = [
   { name: "The Phone Booth",     icon: "📞", grad: ["#0f4c5c", "#1d8a9e"], decor: ["☎️","📱","🔔","❓"] },
   { name: "The Link Tunnel",     icon: "🔗", grad: ["#5c1f4a", "#9e2f7a"], decor: ["🔗","📦","🚚","⚠️"] },
   { name: "The Friendship Park",  icon: "🌳", grad: ["#1f5c2f", "#3a9e4f"], decor: ["🌳","🪑","💬","🤝"] },
-  { name: "The Password Vault",  icon: "🔐", grad: ["#5c4a1f", "#9e842f"], decor: ["🔑","🔒","🗝️","💎"] },
+  { name: "The Hall of Mirrors", icon: "🪞", grad: ["#1f5c5c", "#2f9e9e"], decor: ["🪞","🎭","👁️","✨"] },
   { name: "The Wi-Fi Cafe",      icon: "☕", grad: ["#5c2f1f", "#9e552f"], decor: ["☕","📶","💻","🍰"] },
   { name: "The Treasure Vault",  icon: "💎", grad: ["#5c4612", "#caa02f"], decor: ["💰","💎","🪙","🏆"] },
   { name: "The Computer Lab",    icon: "💻", grad: ["#1f3a5c", "#2f6f9e"], decor: ["💻","🖥️","🐛","⚠️"] },
   { name: "The Town Square",     icon: "📢", grad: ["#3a1f5c", "#6f2f9e"], decor: ["📢","🏛️","🗣️","📸"] },
-  { name: "The Hall of Mirrors", icon: "🪞", grad: ["#1f5c5c", "#2f9e9e"], decor: ["🪞","🎭","👁️","✨"] }
+  { name: "The Password Vault",  icon: "🔐", grad: ["#5c4a1f", "#9e842f"], decor: ["🔑","🔒","🗝️","💎"] }
 ];
 
 const QUESTIONS = {
