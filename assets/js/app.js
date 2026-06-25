@@ -287,6 +287,59 @@ function render(now) {
   const nw = ctx.measureText(nm).width + 14;
   ctx.fillStyle = "rgba(123,92,255,.92)"; roundRect(px - nw/2, py + TILE*0.42, nw, 16, 8); ctx.fill();
   ctx.fillStyle = "#fff"; ctx.fillText(nm, px, py + TILE*0.42 + 8);
+
+  // ---- objective hint arrow (points to the next unsolved terminal) ----
+  const tgt = world.terminals.find(t => !t.solved);
+  if (tgt) {
+    const tx = (tgt.x + 0.5) * TILE, ty = (tgt.y + 0.5) * TILE;
+    const dx = tx - p.x, dy = ty - p.y, dist = Math.hypot(dx, dy);
+    if (dist > TILE * 1.7) {
+      const ang = Math.atan2(dy, dx);
+      const rad = 46 + 7 * Math.abs(Math.sin(now / 240));
+      const ax = px + Math.cos(ang) * rad, ay = (py - bob) + Math.sin(ang) * rad;
+      ctx.save();
+      ctx.translate(ax, ay); ctx.rotate(ang);
+      ctx.fillStyle = "#ffc23d"; ctx.strokeStyle = "#fff"; ctx.lineWidth = 3; ctx.lineJoin = "round";
+      ctx.beginPath(); ctx.moveTo(17, 0); ctx.lineTo(-9, -12); ctx.lineTo(-9, 12); ctx.closePath();
+      ctx.fill(); ctx.stroke();
+      ctx.restore();
+    }
+  }
+
+  drawMinimap(now);
+}
+
+/* ---- minimap: a thin overview strip of the whole vault ---- */
+function drawMinimap(now) {
+  const mmW = Math.min(viewW - 24, 340);
+  const mmH = Math.max(24, mmW * (world.worldH / world.worldW));
+  const mmX = (viewW - mmW) / 2, mmY = 10;
+  const sc = mmW / world.worldW;            // uniform scale (aspect preserved)
+  ctx.save();
+  // panel
+  ctx.fillStyle = "rgba(20,24,48,.62)"; ctx.strokeStyle = "rgba(255,255,255,.35)"; ctx.lineWidth = 2;
+  roundRect(mmX - 7, mmY - 7, mmW + 14, mmH + 14, 11); ctx.fill(); ctx.stroke();
+  // rooms
+  for (let r = 0; r < world.n; r++) {
+    const loc = LOCATIONS[r % LOCATIONS.length];
+    ctx.fillStyle = lighten(loc.grad[1], 0.4);
+    ctx.fillRect(mmX + r * ROOM_W * TILE * sc + 1, mmY + 1, ROOM_W * TILE * sc - 2, mmH - 2);
+  }
+  // doors (red locked / green open)
+  world.doors.forEach(d => {
+    ctx.fillStyle = d.open ? "#2fd47a" : "#ff5470";
+    ctx.fillRect(mmX + (d.x + 0.5) * TILE * sc - 1.5, mmY + mmH * 0.28, 3, mmH * 0.44);
+  });
+  // terminals (amber unsolved / green solved)
+  world.terminals.forEach(t => {
+    ctx.beginPath(); ctx.arc(mmX + (t.x + 0.5) * TILE * sc, mmY + (t.y + 0.5) * TILE * sc, 2.6, 0, 7);
+    ctx.fillStyle = t.solved ? "#2fd47a" : "#ffc23d"; ctx.fill();
+  });
+  // player (pulsing white dot)
+  const pr = 3.2 + 0.8 * Math.abs(Math.sin(now / 300));
+  ctx.beginPath(); ctx.arc(mmX + world.player.x * sc, mmY + world.player.y * sc, pr, 0, 7);
+  ctx.fillStyle = "#fff"; ctx.strokeStyle = "#7b5cff"; ctx.lineWidth = 2; ctx.fill(); ctx.stroke();
+  ctx.restore();
 }
 
 function drawDoorTile(sx, sy, v) {

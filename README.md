@@ -6,7 +6,7 @@ Players pick an **animal hero**, then **walk around** *The Digital Vault* (top-d
 
 ## ✨ Features
 
-- **Walk-around escape room**: a touch-controlled top-down world (canvas). Your animal hero explores 10 themed rooms (Mail Room, Lucky Casino, Hall of Mirrors…) connected by locked doors.
+- **Walk-around escape room**: a touch-controlled top-down world (canvas). Your animal hero explores 10 themed rooms (Mail Room, Treasure Vault, Hall of Mirrors…) connected by locked doors.
 - **iPad / touch first**: on-screen **virtual joystick**, **tap-to-move**, and keyboard (arrows / WASD) on desktop. Zoom/scroll locked during play.
 - **Puzzles as obstacles**: reach a room's terminal → puzzle pops up → answer correctly to unlock that room's door. Wrong answers teach you and let you retry.
 - **12 animal avatars** to pick from after sign-up.
