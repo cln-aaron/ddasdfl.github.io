@@ -679,7 +679,6 @@ function finishGame() {
   $("#stat-level").textContent = state.level === "easy" ? "Easy" : "Normal";
   showScreen("result");
 }
-$("#btn-to-feedback").addEventListener("click", () => { sfx.click(); showScreen("feedback"); });
 
 /* =====================================================================
    15) FEEDBACK
@@ -806,6 +805,31 @@ $("#btn-export-csv").addEventListener("click", () => {
   download(lines.join("\n"), "cyber-escape-data.csv", "text/csv");
 });
 $("#btn-export-json").addEventListener("click", () => { const all = getLocal(); if (!all.length) return alert("No data to export."); download(JSON.stringify(all, null, 2), "cyber-escape-data.json", "application/json"); });
+
+$("#btn-test-formspree").addEventListener("click", async () => {
+  const el = $("#formspree-status");
+  el.style.color = "var(--ink-soft)";
+  el.textContent = "Sending a test entry to Formspree…";
+  try {
+    const res = await fetch(FORMSPREE_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({ _subject: "Cyber Escape — TEST PING", test: true, note: "Organiser connectivity test", submittedAt: new Date().toISOString() })
+    });
+    let body = {}; try { body = await res.json(); } catch (e) {}
+    if (res.ok) {
+      el.style.color = "var(--green-d)";
+      el.textContent = "✅ Formspree is working! HTTP " + res.status + " — check your Formspree inbox for 'TEST PING'.";
+    } else {
+      el.style.color = "var(--red)";
+      const msg = (body && (body.error || (body.errors && body.errors.map(x => x.message).join("; ")))) || "";
+      el.textContent = `⚠ Formspree replied HTTP ${res.status}. ${msg} ${res.status === 422 || res.status === 403 ? "(The form likely needs activation — submit once on the live site, then click the confirm link Formspree emails you.)" : ""}`;
+    }
+  } catch (e) {
+    el.style.color = "var(--red)";
+    el.textContent = "⚠ Could not reach Formspree (network/CORS). Make sure you're on the live https site and online. " + (e.message || "");
+  }
+});
 $("#btn-clear-data").addEventListener("click", () => { if (confirm("Delete ALL locally stored submissions on this device? This cannot be undone.\n\nExport first if you still need the data.")) { localStorage.removeItem(STORAGE_KEY); renderAdmin(); } });
 function download(content, filename, type) {
   const blob = new Blob([content], { type }), url = URL.createObjectURL(blob), a = document.createElement("a");

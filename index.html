@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css?v=6" />
+  <link rel="stylesheet" href="assets/css/style.css?v=7" />
 </head>
 <body>
   <div class="bg-sky" aria-hidden="true"></div>
@@ -160,26 +160,23 @@
       </div>
     </section>
 
-    <!-- ============ RESULT ============ -->
+    <!-- ============ RESULT + FEEDBACK (one page) ============ -->
     <section class="screen" id="screen-result">
-      <div class="card hero">
-        <div class="result-hero"><span class="result-avatar" id="result-avatar">🦊</span><span class="result-emoji" id="result-emoji">🎉</span></div>
-        <h2 class="title-pop small" id="result-title">You Escaped!</h2>
-        <p class="lede" id="result-lede"></p>
-        <div class="result-stats">
-          <div class="stat"><span class="stat-num" id="stat-score">0/10</span><span class="stat-label">Keys (1st try)</span></div>
-          <div class="stat"><span class="stat-num" id="stat-time">00:00</span><span class="stat-label">Time</span></div>
-          <div class="stat"><span class="stat-num" id="stat-level">Easy</span><span class="stat-label">Mode</span></div>
-        </div>
-        <button class="btn btn-primary btn-lg btn-bounce" id="btn-to-feedback">Give Feedback →</button>
-      </div>
-    </section>
-
-    <!-- ============ FEEDBACK ============ -->
-    <section class="screen" id="screen-feedback">
       <div class="card">
-        <h2 class="section-title">💬 Programme Feedback</h2>
-        <p class="muted">Please complete before you finish. <i style="color:var(--pink);font-style:normal">*</i> required.</p>
+        <div class="hero">
+          <div class="result-hero"><span class="result-avatar" id="result-avatar">🦊</span><span class="result-emoji" id="result-emoji">🎉</span></div>
+          <h2 class="title-pop small" id="result-title">You Escaped!</h2>
+          <p class="lede" id="result-lede"></p>
+          <div class="result-stats">
+            <div class="stat"><span class="stat-num" id="stat-score">0/5</span><span class="stat-label">Keys (1st try)</span></div>
+            <div class="stat"><span class="stat-num" id="stat-time">00:00</span><span class="stat-label">Time</span></div>
+            <div class="stat"><span class="stat-num" id="stat-level">Easy</span><span class="stat-label">Mode</span></div>
+          </div>
+        </div>
+
+        <hr class="divider" />
+        <h3 class="section-title">💬 Programme Feedback</h3>
+        <p class="muted">Please complete to finish. <i style="color:var(--pink);font-style:normal">*</i> required.</p>
         <form id="feedback-form" novalidate>
           <fieldset class="likert">
             <legend>Overall Satisfaction in the programme <i>*</i></legend>
@@ -237,7 +234,7 @@
           <label class="field"><span>Please provide any other comments you have: <i>*</i></span><textarea name="otherComments" rows="3" required></textarea></label>
 
           <p class="form-error" id="feedback-error" hidden></p>
-          <div class="actions"><button type="submit" class="btn btn-primary">Submit &amp; Finish →</button></div>
+          <div class="actions"><button type="submit" class="btn btn-primary btn-lg">Submit &amp; Finish →</button></div>
         </form>
       </div>
     </section>
@@ -262,9 +259,11 @@
         <div class="actions admin-actions">
           <button class="btn btn-primary" id="btn-export-csv">⬇ Export CSV</button>
           <button class="btn btn-ghost" id="btn-export-json">⬇ Export JSON</button>
+          <button class="btn btn-ghost" id="btn-test-formspree">🧪 Test Formspree</button>
           <button class="btn btn-danger" id="btn-clear-data">🗑 Clear Local Data</button>
           <button class="btn btn-ghost" data-goto="welcome">← Back to Game</button>
         </div>
+        <p class="muted" id="formspree-status" style="margin-top:4px"></p>
         <div class="admin-table-wrap"><table class="admin-table" id="admin-table"></table></div>
       </div>
     </section>
@@ -276,7 +275,7 @@
     <button class="link-btn" id="btn-admin-link">Organiser access</button>
   </footer>
 
-  <script src="assets/js/data.js?v=6"></script>
-  <script src="assets/js/app.js?v=6"></script>
+  <script src="assets/js/data.js?v=7"></script>
+  <script src="assets/js/app.js?v=7"></script>
 </body>
 </html>
