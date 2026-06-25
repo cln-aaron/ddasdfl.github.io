@@ -75,13 +75,35 @@ body {
 .checkbox input { margin-top: 3px; width: 20px; height: 20px; accent-color: var(--purple); flex-shrink: 0; }
 .form-error { color: var(--red); font-size: 14px; margin-top: 12px; font-weight: 600; }
 
+/* consent (PDPA) */
+.consent-body { max-height: 46vh; overflow-y: auto; background: var(--cream); border: 3px solid #ece6fa; border-radius: 14px; padding: 14px 16px; margin: 14px 0; font-size: 14px; color: var(--ink); -webkit-overflow-scrolling: touch; }
+.consent-body ol, .consent-body ul { margin: 0 0 12px; padding-left: 22px; }
+.consent-body li { margin-bottom: 8px; }
+.consent-body p { margin: 10px 0; }
+.consent-body a { color: var(--purple-d); font-weight: 600; }
+
+/* radio groups & Likert scales */
+.radio-group, .likert { border: none; padding: 0; margin: 0 0 16px; }
+.radio-group legend, .likert legend { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 10px; padding: 0; }
+.radio-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; cursor: pointer; font-size: 15px; }
+.radio-row input { width: 20px; height: 20px; accent-color: var(--purple); flex-shrink: 0; }
+.scale { display: flex; gap: 8px; flex-wrap: wrap; }
+.scale label { cursor: pointer; position: relative; }
+.scale input { position: absolute; opacity: 0; width: 0; height: 0; }
+.scale span { display: grid; place-items: center; min-width: 46px; height: 46px; padding: 0 6px; border-radius: 12px; border: 3px solid #e7e1f5; background: var(--cream); font-family: "Baloo 2"; font-weight: 800; font-size: 16px; box-shadow: 0 4px 0 #e0daf2; transition: transform .08s; }
+.scale label:active span { transform: translateY(3px); box-shadow: 0 1px 0 #e0daf2; }
+.scale input:checked + span { background: var(--purple); color: #fff; border-color: var(--purple-d); box-shadow: 0 4px 0 var(--purple-d); }
+.scale input:focus-visible + span { outline: 3px solid var(--cyan); }
+.scale.yn span { min-width: 0; padding: 0 26px; }
+.scale-ends { display: flex; justify-content: space-between; font-size: 11px; color: var(--ink-soft); margin-top: 4px; max-width: 290px; }
+
 /* avatar select */
 .avatar-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin: 20px 0; }
 .avatar-pick { background: var(--cream); border: 4px solid #ece6fa; border-radius: 18px; padding: 14px 6px 12px; cursor: pointer; text-align: center; transition: transform .12s, border-color .15s, box-shadow .15s; box-shadow: 0 5px 0 #ddd6f2; }
 .avatar-pick:hover { transform: translateY(-4px); }
 .avatar-pick .ava-emoji { font-size: clamp(34px,9vw,46px); display: block; line-height: 1; filter: drop-shadow(0 4px 3px rgba(0,0,0,.18)); }
-.avatar-pick .ava-name { font-size: 12px; font-weight: 600; margin-top: 8px; }
-.avatar-pick .ava-trait { font-size: 10.5px; color: var(--ink-soft); }
+.avatar-pick .ava-name { display: block; font-size: 12px; font-weight: 600; margin-top: 8px; }
+.avatar-pick .ava-trait { display: block; font-size: 10.5px; color: var(--ink-soft); margin-top: 2px; }
 .avatar-pick.selected { border-color: var(--purple); background: #f3eeff; box-shadow: 0 5px 0 var(--purple-d); transform: translateY(-4px) scale(1.04); }
 .avatar-pick.selected .ava-emoji { animation: avahop .6s ease infinite; }
 @keyframes avahop { 0%,100%{transform:translateY(0) rotate(-3deg);} 50%{transform:translateY(-6px) rotate(3deg);} }

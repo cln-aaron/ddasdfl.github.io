@@ -13,10 +13,11 @@ Players pick an **animal hero**, then **walk around** *The Digital Vault* (top-d
 - **One game, two difficulty modes**
   - 🌱 **Easy** — designed for *kids & seniors* (everyday scams, gentle pace, hints)
   - ⚡ **Normal** — designed for *PMET / working adults* (deepfakes, BEC, AI data risks)
-- **10 challenges per level** (20 total), each with a teaching moment after every answer.
-- **Participant registration** collecting: Full name, Email, Contact number, **last 4 characters of NRIC**, Gender, Occupation, and age/needs group.
+- **5 challenges per level** (10 total), each with a teaching moment after every answer.
+- **PDPA consent page** (DDAS/IMDA wording) shown before any data is collected.
+- **Personal particulars** collected: Full name, Age, Email, Contact number, Participant demographics.
 - **Stores every option each participant selects** (their choice + correctness + number of attempts) for reporting.
-- **Post-game feedback** (enjoyment, learning, recommendation, comments).
+- **Programme feedback** (satisfaction, usefulness, motivation [1–5]; would-apply & interested-in-other [Yes/No]; keen areas & comments).
 - **Confetti, sound effects (mute toggle), live timer, key/score counter.**
 - **One combined submission**: front registration info + end-of-game score/answers + feedback are gathered, then sent together to **Formspree** in a single POST — with an automatic **local backup + CSV/JSON export** fallback.
 
@@ -33,7 +34,7 @@ python3 -m http.server 8000
 
 All data is captured first, then sent in **one** submission:
 
-1. **At sign-up (front):** name, email, contact, last-4 NRIC, gender, occupation, age group, consent.
+1. **At sign-up (front):** PDPA consent, then name, age, email, contact, participant demographics.
 2. **During the game:** every option chosen per room, whether the first attempt was correct, and number of attempts.
 3. **At the end:** final score, time taken, and the feedback ratings/comments.
 
@@ -82,4 +83,4 @@ Edit `assets/js/data.js`. Each question has: `room`, `prompt`, `options`, `answe
 
 ## 🔏 Data & privacy note
 
-Personal data (incl. last 4 NRIC) is collected with explicit consent. Use it only for the event and follow-up, keep your Formspree account secured, and clear local device data after the event using the dashboard's **Clear Local Data** button.
+Personal data is collected only after explicit PDPA consent (DDAS/IMDA). Use it only for the event and follow-up, keep your Formspree account secured, and clear local device data after the event using the dashboard's **Clear Local Data** button.

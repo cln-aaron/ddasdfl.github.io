@@ -19,8 +19,7 @@ const state = {
   startTime: null, elapsed: 0, timerId: null,
   paused: false,            // true while a puzzle modal is open
   nearTerminal: null,
-  soundOn: true,
-  feedback: { enjoyment: 0, learning: 0 }
+  soundOn: true
 };
 
 /* ---------- 3) HELPERS ---------- */
@@ -128,7 +127,14 @@ $("#sound-toggle").addEventListener("click", () => {
 
 /* ---------- 5) NAV ---------- */
 $$("[data-goto]").forEach(b => b.addEventListener("click", () => { sfx.click(); showScreen(b.dataset.goto); }));
-$("#btn-begin").addEventListener("click", () => { sfx.click(); showScreen("register"); });
+$("#btn-begin").addEventListener("click", () => { sfx.click(); showScreen("consent"); });
+
+/* consent (PDPA) → particulars */
+$("#btn-consent-next").addEventListener("click", () => {
+  const cb = $("#consent-check"), err = $("#consent-error");
+  if (!cb.checked) { err.textContent = "Please tick the box to consent before continuing."; err.hidden = false; return; }
+  err.hidden = true; sfx.click(); showScreen("register");
+});
 
 /* ---------- 6) REGISTRATION ---------- */
 $("#register-form").addEventListener("submit", e => {
@@ -137,9 +143,8 @@ $("#register-form").addEventListener("submit", e => {
   if (!form.checkValidity()) { err.textContent = "Please fill in all required fields (marked *) correctly."; err.hidden = false; form.reportValidity(); return; }
   const d = Object.fromEntries(new FormData(form).entries());
   state.player = {
-    fullName: d.fullName.trim(), email: d.email.trim(), contact: d.contact.trim(),
-    nric4: (d.nric4||"").trim().toUpperCase(), gender: d.gender,
-    occupation: d.occupation.trim(), ageGroup: d.ageGroup, consent: !!d.consent
+    fullName: d.fullName.trim(), age: d.age, email: d.email.trim(),
+    contact: d.contact.trim(), demographic: d.demographic, consent: true
   };
   sfx.click(); showScreen("avatar");
 });
@@ -462,7 +467,7 @@ function loop(now) {
    ===================================================================== */
 function startGame(level) {
   state.level = level;
-  state.questions = QUESTIONS[level];
+  state.questions = QUESTIONS[level].slice(0, 5);   // 5 rooms per level
   state.score = 0; state.answerMap = {}; state.paused = false; moveTarget = null;
   input.x = 0; input.y = 0;
 
@@ -679,21 +684,14 @@ $("#btn-to-feedback").addEventListener("click", () => { sfx.click(); showScreen(
 /* =====================================================================
    15) FEEDBACK
    ===================================================================== */
-function buildRating(id, key) {
-  const wrap = document.getElementById(id); wrap.innerHTML = "";
-  for (let i = 1; i <= 5; i++) {
-    const s = document.createElement("button");
-    s.type = "button"; s.className = "star"; s.textContent = "★"; s.setAttribute("aria-label", `${i} star`);
-    s.addEventListener("click", () => { state.feedback[key] = i; sfx.click(); $$(".star", wrap).forEach((x, idx) => x.classList.toggle("on", idx < i)); });
-    wrap.appendChild(s);
-  }
-}
-buildRating("rating-enjoy", "enjoyment");
-buildRating("rating-learn", "learning");
-
 $("#feedback-form").addEventListener("submit", async e => {
   e.preventDefault();
-  const data = Object.fromEntries(new FormData(e.target).entries());
+  const form = e.target, err = $("#feedback-error"); err.hidden = true;
+  if (!form.checkValidity()) {
+    err.textContent = "Please answer all questions (marked *) before submitting.";
+    err.hidden = false; form.reportValidity(); return;
+  }
+  const data = Object.fromEntries(new FormData(form).entries());
   const record = buildRecord(data);
   saveLocal(record);
   $("#thanks-status").textContent = "Submitting your responses…"; sfx.win(); showScreen("thanks");
@@ -715,15 +713,17 @@ function buildRecord(fb) {
   const answers = Object.keys(state.answerMap).map(Number).sort((a,b)=>a-b).map(k => state.answerMap[k]);
   return {
     submittedAt: new Date().toISOString(),
-    fullName: state.player.fullName, email: state.player.email, contact: state.player.contact,
-    nric4: state.player.nric4, gender: state.player.gender, occupation: state.player.occupation,
-    ageGroup: state.player.ageGroup, consent: state.player.consent ? "Yes" : "No",
+    fullName: state.player.fullName, age: state.player.age, email: state.player.email,
+    contact: state.player.contact, demographic: state.player.demographic,
+    consent: state.player.consent ? "Yes" : "No",
     avatar: state.avatar ? state.avatar.name : "",
     level: state.level, score: state.score, totalQuestions: state.questions.length,
     timeSeconds: state.elapsed, timeFormatted: fmtTime(state.elapsed),
     answers,
-    feedbackEnjoyment: state.feedback.enjoyment, feedbackLearning: state.feedback.learning,
-    feedbackRecommend: fb.recommend || "", feedbackComments: fb.comments || ""
+    fbSatisfaction: fb.satisfaction || "", fbUsefulness: fb.usefulness || "",
+    fbMotivation: fb.motivation || "", fbWouldApply: fb.wouldApply || "",
+    fbInterestedOther: fb.interestedOther || "", fbKeenAreas: fb.keenAreas || "",
+    fbOtherComments: fb.otherComments || ""
   };
 }
 async function sendToFormspree(record) {
@@ -763,12 +763,12 @@ function saveLocal(record) { const all = getLocal(); all.push(record); try { loc
 /* ---------- play again ---------- */
 $("#btn-play-again").addEventListener("click", () => {
   sfx.click(); music.stop();
-  state.player = null; state.avatar = null; state.level = null; state.feedback = { enjoyment: 0, learning: 0 };
+  state.player = null; state.avatar = null; state.level = null;
   $("#register-form").reset(); $("#feedback-form").reset();
-  $$(".star").forEach(s => s.classList.remove("on"));
+  const cc = $("#consent-check"); if (cc) cc.checked = false;
   $$(".avatar-pick").forEach(x => x.classList.remove("selected"));
   $("#btn-avatar-next").disabled = true;
-  $("#objective").textContent = "Walk to the glowing terminal and solve the puzzle to open the door! 🚪";
+  $("#objective").textContent = "Walk onto the glowing terminal to face its puzzle and unlock the door! 🚪";
   showScreen("welcome");
 });
 
@@ -789,17 +789,18 @@ function renderAdmin() {
     <div class="stat"><span class="stat-num">${avg}</span><span class="stat-label">Avg score</span></div>`;
   const table = $("#admin-table");
   if (!total) { table.innerHTML = `<tr><td class="empty">No local submissions yet.</td></tr>`; return; }
-  const head = `<tr><th>Time</th><th>Name</th><th>Email</th><th>Contact</th><th>NRIC</th><th>Gender</th><th>Occupation</th><th>Group</th><th>Avatar</th><th>Level</th><th>Score</th><th>Duration</th></tr>`;
+  const head = `<tr><th>Time</th><th>Name</th><th>Age</th><th>Email</th><th>Contact</th><th>Demographic</th><th>Avatar</th><th>Level</th><th>Score</th><th>Duration</th><th>Satisf.</th><th>Useful</th><th>Motiv.</th><th>Apply</th><th>Interested</th></tr>`;
   const rows = all.slice().reverse().map(r => `<tr>
-    <td>${escapeHtml(new Date(r.submittedAt).toLocaleString())}</td><td>${escapeHtml(r.fullName)}</td><td>${escapeHtml(r.email)}</td>
-    <td>${escapeHtml(r.contact)}</td><td>${escapeHtml(r.nric4)}</td><td>${escapeHtml(r.gender)}</td><td>${escapeHtml(r.occupation)}</td>
-    <td>${escapeHtml(r.ageGroup)}</td><td>${escapeHtml(r.avatar||"")}</td><td>${escapeHtml(r.level)}</td>
-    <td>${escapeHtml(r.score + "/" + r.totalQuestions)}</td><td>${escapeHtml(r.timeFormatted)}</td></tr>`).join("");
+    <td>${escapeHtml(new Date(r.submittedAt).toLocaleString())}</td><td>${escapeHtml(r.fullName)}</td><td>${escapeHtml(r.age)}</td><td>${escapeHtml(r.email)}</td>
+    <td>${escapeHtml(r.contact)}</td><td>${escapeHtml(r.demographic)}</td><td>${escapeHtml(r.avatar||"")}</td><td>${escapeHtml(r.level)}</td>
+    <td>${escapeHtml(r.score + "/" + r.totalQuestions)}</td><td>${escapeHtml(r.timeFormatted)}</td>
+    <td>${escapeHtml(r.fbSatisfaction)}</td><td>${escapeHtml(r.fbUsefulness)}</td><td>${escapeHtml(r.fbMotivation)}</td>
+    <td>${escapeHtml(r.fbWouldApply)}</td><td>${escapeHtml(r.fbInterestedOther)}</td></tr>`).join("");
   table.innerHTML = head + rows;
 }
 $("#btn-export-csv").addEventListener("click", () => {
   const all = getLocal(); if (!all.length) return alert("No data to export.");
-  const cols = ["submittedAt","fullName","email","contact","nric4","gender","occupation","ageGroup","consent","avatar","level","score","totalQuestions","timeSeconds","timeFormatted","feedbackEnjoyment","feedbackLearning","feedbackRecommend","feedbackComments","answers"];
+  const cols = ["submittedAt","fullName","age","email","contact","demographic","consent","avatar","level","score","totalQuestions","timeSeconds","timeFormatted","fbSatisfaction","fbUsefulness","fbMotivation","fbWouldApply","fbInterestedOther","fbKeenAreas","fbOtherComments","answers"];
   const esc = v => `"${(typeof v === "object" ? JSON.stringify(v) : String(v ?? "")).replace(/"/g, '""')}"`;
   const lines = [cols.join(",")]; all.forEach(r => lines.push(cols.map(c => esc(r[c])).join(",")));
   download(lines.join("\n"), "cyber-escape-data.csv", "text/csv");

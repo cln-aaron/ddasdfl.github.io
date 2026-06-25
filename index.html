@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css?v=5" />
+  <link rel="stylesheet" href="assets/css/style.css?v=6" />
 </head>
 <body>
   <div class="bg-sky" aria-hidden="true"></div>
@@ -36,36 +36,59 @@
       </div>
     </section>
 
-    <!-- ============ REGISTRATION ============ -->
+    <!-- ============ CONSENT (PDPA) ============ -->
+    <section class="screen" id="screen-consent">
+      <div class="card">
+        <h2 class="section-title">📋 Collection, Use and Disclosure of Personal Data</h2>
+        <div class="consent-body">
+          <ol>
+            <li>I consent to the collection, use and retention of my personal data by DDAS and partner organisations, for the purposes of processing, servicing and managing my registration for this event.</li>
+            <li>I will inform DDAS immediately of any changes to my contact details and/or personal data in order to enable DDAS and partner organisations, to contact me for all matters relating to this event.</li>
+            <li>I consent to be contacted by DDAS and partner organisations, via email, text messages, calls and/or post for matters related to my registration for this event and other DDAS membership matters (if applicable), as well as to obtain my opinion/feedback on such matters.</li>
+            <li>I consent to the disclosure of my personal data by DDAS and partner organisations, to authorise third parties for the latter to collect, use and retain my personal data for the purpose of processing, servicing and managing my registration for and participation in this event.</li>
+            <li>I understand that photography and/or videography may be taken during this event for news and publicity purposes and may be used for print and on online/electronic platforms.</li>
+            <li>I acknowledge that DDAS and partner organisations, owns all rights to the photographs and video recordings.</li>
+            <li>If I do not wish to have any photographs or video recordings taken of me, I will inform DDAS before the commencement of this event.</li>
+          </ol>
+          <p>By completing the form I consent to the following uses of the information provided herein by me to the Digital Defence Alliance Singapore and Infocomm Media Development Authority of Singapore (IMDA):</p>
+          <ul>
+            <li>To verify information provided by me when participating in activities organised by the Digital Defence Alliance Singapore.</li>
+            <li>For the compilation of any statistics by IMDA, provided that the statistics involve techniques to prevent the identification of individuals by any foreseeable means.</li>
+          </ul>
+          <p>For enquiries on personal data protection matters, please email to <a href="mailto:hello@ddas.sg">hello@ddas.sg</a>.</p>
+        </div>
+        <label class="checkbox"><input type="checkbox" id="consent-check" /><span>I have read and consent to the above. <i>*</i></span></label>
+        <p class="form-error" id="consent-error" hidden></p>
+        <div class="actions">
+          <button type="button" class="btn btn-ghost" data-goto="welcome">← Back</button>
+          <button type="button" class="btn btn-primary" id="btn-consent-next">Next →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PERSONAL PARTICULARS ============ -->
     <section class="screen" id="screen-register">
       <div class="card">
-        <h2 class="section-title">👤 Player Sign-Up</h2>
+        <h2 class="section-title">👤 Personal Particulars</h2>
         <p class="muted">Tell us more about yourself!</p>
         <form id="register-form" novalidate>
           <div class="form-grid">
             <label class="field"><span>Full Name <i>*</i></span><input type="text" name="fullName" autocomplete="name" required /></label>
+            <label class="field"><span>Age <i>*</i></span><input type="number" name="age" inputmode="numeric" min="1" max="120" required /></label>
             <label class="field"><span>Email <i>*</i></span><input type="email" name="email" autocomplete="email" required /></label>
             <label class="field"><span>Contact Number <i>*</i></span><input type="tel" name="contact" inputmode="tel" autocomplete="tel" required /></label>
-            <label class="field"><span>Last 4 characters of NRIC <i>*</i></span><input type="text" name="nric4" inputmode="text" maxlength="4" pattern="[A-Za-z0-9]{4}" placeholder="e.g. 567A" title="Enter the last 4 characters of your NRIC, e.g. 567A" required /></label>
-            <label class="field"><span>Gender <i>*</i></span>
-              <select name="gender" required><option value="">Select…</option><option>Male</option><option>Female</option><option>Prefer not to say</option></select>
-            </label>
-            <label class="field"><span>Occupation <i>*</i></span><input type="text" name="occupation" autocomplete="organization-title" required /></label>
-            <label class="field field-wide"><span>Which group best describes you? <i>*</i></span>
-              <select name="ageGroup" required>
-                <option value="">Select…</option>
-                <option>Children (≤12 years)</option>
-                <option>Youth (13–25 years)</option>
-                <option>Adults (26–59 years)</option>
-                <option>Seniors (≥60 years)</option>
-                <option>Persons with Disabilities</option>
-              </select>
-            </label>
           </div>
-          <label class="checkbox"><input type="checkbox" name="consent" required /><span>I consent to the organisers collecting and using the information above for this event and follow-up. <i>*</i></span></label>
+          <fieldset class="radio-group field-wide">
+            <legend>Participant demographics <i>*</i></legend>
+            <label class="radio-row"><input type="radio" name="demographic" value="Children (≤12 years)" required /><span>Children (≤12 years)</span></label>
+            <label class="radio-row"><input type="radio" name="demographic" value="Youth (13-25 years)" /><span>Youth (13-25 years)</span></label>
+            <label class="radio-row"><input type="radio" name="demographic" value="Adults (26-59 years)" /><span>Adults (26-59 years)</span></label>
+            <label class="radio-row"><input type="radio" name="demographic" value="Seniors (≥60 years)" /><span>Seniors (≥60 years)</span></label>
+            <label class="radio-row"><input type="radio" name="demographic" value="Persons with Disabilities" /><span>Persons with Disabilities</span></label>
+          </fieldset>
           <p class="form-error" id="register-error" hidden></p>
           <div class="actions">
-            <button type="button" class="btn btn-ghost" data-goto="welcome">← Back</button>
+            <button type="button" class="btn btn-ghost" data-goto="consent">← Back</button>
             <button type="submit" class="btn btn-primary">Pick My Hero →</button>
           </div>
         </form>
@@ -155,15 +178,64 @@
     <!-- ============ FEEDBACK ============ -->
     <section class="screen" id="screen-feedback">
       <div class="card">
-        <h2 class="section-title">💬 Quick Feedback</h2>
-        <p class="muted">Help us improve the game. It takes 20 seconds.</p>
+        <h2 class="section-title">💬 Programme Feedback</h2>
+        <p class="muted">Please complete before you finish. <i style="color:var(--pink);font-style:normal">*</i> required.</p>
         <form id="feedback-form" novalidate>
-          <div class="field"><span>How much did you enjoy the game?</span><div class="rating" id="rating-enjoy" data-name="enjoyment"></div></div>
-          <div class="field"><span>How much did you learn about staying safe?</span><div class="rating" id="rating-learn" data-name="learning"></div></div>
-          <label class="field"><span>How likely are you to recommend this to others?</span>
-            <select name="recommend"><option value="">Select…</option><option>Very likely</option><option>Likely</option><option>Neutral</option><option>Unlikely</option><option>Very unlikely</option></select>
-          </label>
-          <label class="field"><span>Any comments or suggestions? (optional)</span><textarea name="comments" rows="3" placeholder="Tell us what you think…"></textarea></label>
+          <fieldset class="likert">
+            <legend>Overall Satisfaction in the programme <i>*</i></legend>
+            <div class="scale">
+              <label><input type="radio" name="satisfaction" value="1" required /><span>1</span></label>
+              <label><input type="radio" name="satisfaction" value="2" /><span>2</span></label>
+              <label><input type="radio" name="satisfaction" value="3" /><span>3</span></label>
+              <label><input type="radio" name="satisfaction" value="4" /><span>4</span></label>
+              <label><input type="radio" name="satisfaction" value="5" /><span>5</span></label>
+            </div>
+            <div class="scale-ends"><span>Not satisfied</span><span>Very satisfied</span></div>
+          </fieldset>
+
+          <fieldset class="likert">
+            <legend>Programme is useful in building digital skills or addressing digital needs <i>*</i></legend>
+            <div class="scale">
+              <label><input type="radio" name="usefulness" value="1" required /><span>1</span></label>
+              <label><input type="radio" name="usefulness" value="2" /><span>2</span></label>
+              <label><input type="radio" name="usefulness" value="3" /><span>3</span></label>
+              <label><input type="radio" name="usefulness" value="4" /><span>4</span></label>
+              <label><input type="radio" name="usefulness" value="5" /><span>5</span></label>
+            </div>
+            <div class="scale-ends"><span>Strongly disagree</span><span>Strongly agree</span></div>
+          </fieldset>
+
+          <fieldset class="likert">
+            <legend>Motivated to continue learning about digital and embrace digital after programme <i>*</i></legend>
+            <div class="scale">
+              <label><input type="radio" name="motivation" value="1" required /><span>1</span></label>
+              <label><input type="radio" name="motivation" value="2" /><span>2</span></label>
+              <label><input type="radio" name="motivation" value="3" /><span>3</span></label>
+              <label><input type="radio" name="motivation" value="4" /><span>4</span></label>
+              <label><input type="radio" name="motivation" value="5" /><span>5</span></label>
+            </div>
+            <div class="scale-ends"><span>Strongly disagree</span><span>Strongly agree</span></div>
+          </fieldset>
+
+          <fieldset class="radio-group">
+            <legend>I would apply what I have learnt from the programme <i>*</i></legend>
+            <div class="scale yn">
+              <label><input type="radio" name="wouldApply" value="Yes" required /><span>Yes</span></label>
+              <label><input type="radio" name="wouldApply" value="No" /><span>No</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="radio-group">
+            <legend>I am interested in signing up for other digital-related programme <i>*</i></legend>
+            <div class="scale yn">
+              <label><input type="radio" name="interestedOther" value="Yes" required /><span>Yes</span></label>
+              <label><input type="radio" name="interestedOther" value="No" /><span>No</span></label>
+            </div>
+          </fieldset>
+
+          <label class="field"><span>What other areas related to digital are you keen to learn about? <i>*</i></span><textarea name="keenAreas" rows="2" required></textarea></label>
+          <label class="field"><span>Please provide any other comments you have: <i>*</i></span><textarea name="otherComments" rows="3" required></textarea></label>
+
           <p class="form-error" id="feedback-error" hidden></p>
           <div class="actions"><button type="submit" class="btn btn-primary">Submit &amp; Finish →</button></div>
         </form>
@@ -204,7 +276,7 @@
     <button class="link-btn" id="btn-admin-link">Organiser access</button>
   </footer>
 
-  <script src="assets/js/data.js?v=5"></script>
-  <script src="assets/js/app.js?v=5"></script>
+  <script src="assets/js/data.js?v=6"></script>
+  <script src="assets/js/app.js?v=6"></script>
 </body>
 </html>
