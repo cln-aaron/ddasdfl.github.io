@@ -77,10 +77,53 @@ const sfx = {
   win: () => beep([523,659,784,1046,1318], 0.13, "square", 0.08),
   unlock: () => beep([660,880], 0.1, "triangle", 0.07)
 };
+/* ---- chiptune background music (generated, no files) ---- */
+const music = {
+  timer: null, step: 0, beat: 0,
+  // Cheerful C-major-ish loop. 0 = rest. 16 steps per bar.
+  lead: [523,0,659,523,587,0,784,0, 659,0,523,587,440,0,523,0,
+         587,0,698,587,523,0,659,0, 784,0,659,523,587,0,523,0],
+  bass: [131,0,0,0, 175,0,0,0, 147,0,0,0, 196,0,0,0,
+         131,0,0,0, 175,0,0,0, 147,0,0,0, 98,0,0,0],
+  stepDur: 0.155,
+  note(freq, dur, type, gain) {
+    if (!freq || !audioCtx) return;
+    const t = audioCtx.currentTime;
+    const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+    o.type = type; o.frequency.value = freq;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(gain, t + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(audioCtx.destination); o.start(t); o.stop(t + dur);
+  },
+  start() {
+    if (!state.soundOn || this.timer) return;
+    try {
+      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === "suspended") audioCtx.resume();
+    } catch (e) { return; }
+    this.step = 0;
+    this.timer = setInterval(() => this.tick(), this.stepDur * 1000);
+  },
+  stop() { if (this.timer) { clearInterval(this.timer); this.timer = null; } },
+  tick() {
+    if (!state.soundOn) return;
+    const i = this.step % this.lead.length;
+    this.note(this.lead[i], 0.14, "square", 0.035);
+    this.note(this.bass[i], 0.22, "triangle", 0.055);
+    this.step++;
+  }
+};
+
 $("#sound-toggle").addEventListener("click", () => {
   state.soundOn = !state.soundOn;
   $("#sound-toggle").textContent = state.soundOn ? "🔊" : "🔇";
-  if (state.soundOn) sfx.click();
+  if (state.soundOn) {
+    sfx.click();
+    if ($("#screen-game").classList.contains("active")) music.start();
+  } else {
+    music.stop();
+  }
 });
 
 /* ---------- 5) NAV ---------- */
@@ -193,14 +236,15 @@ function updateCam() {
 
 /* ---- interaction proximity ---- */
 function checkInteract() {
-  const p = world.player; let near = null;
+  if (state.paused) return;
+  const p = world.player;
   for (const t of world.terminals) {
     if (t.solved) continue;
     const tx = (t.x + 0.5) * TILE, ty = (t.y + 0.5) * TILE;
-    if (Math.hypot(p.x - tx, p.y - ty) < TILE * 1.25) { near = t; break; }
+    // Auto-open the puzzle the moment the avatar steps onto the terminal.
+    if (Math.hypot(p.x - tx, p.y - ty) < TILE * 0.85) { state.nearTerminal = t; openPuzzle(t.r); return; }
   }
-  state.nearTerminal = near;
-  $("#interact-btn").hidden = !near || state.paused;
+  state.nearTerminal = null;
 }
 
 /* ---- escape detection: all solved & at the far-right exit ---- */
@@ -440,6 +484,7 @@ function startGame(level) {
   // reports 0 on the first frame after a display change — retry a few frames).
   cancelAnimationFrame(raf);
   startLoopWhenReady(0);
+  music.start();
 }
 function startLoopWhenReady(attempt) {
   resizeCanvas();
@@ -612,6 +657,7 @@ function burstConfetti() {
    ===================================================================== */
 function finishGame() {
   cancelAnimationFrame(raf); raf = null;
+  music.stop();
   clearInterval(state.timerId);
   state.elapsed = Math.floor((Date.now() - state.startTime)/1000);
   const total = state.questions.length;
@@ -716,7 +762,7 @@ function saveLocal(record) { const all = getLocal(); all.push(record); try { loc
 
 /* ---------- play again ---------- */
 $("#btn-play-again").addEventListener("click", () => {
-  sfx.click();
+  sfx.click(); music.stop();
   state.player = null; state.avatar = null; state.level = null; state.feedback = { enjoyment: 0, learning: 0 };
   $("#register-form").reset(); $("#feedback-form").reset();
   $$(".star").forEach(s => s.classList.remove("on"));
