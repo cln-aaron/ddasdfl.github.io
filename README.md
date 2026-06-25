@@ -2,21 +2,23 @@
 
 An interactive **online escape room** that gamifies learning about **scam prevention and AI awareness**, built for community events and roadshows.
 
-Players pick an **animal hero**, then travel room-to-room through *The Digital Vault* — meeting a locked-door scam/AI challenge in each themed location and unlocking their way to escape.
+Players pick an **animal hero**, then **walk around** *The Digital Vault* (top-down, Roblox-style) — reaching a glowing terminal in each themed room where a scam/AI puzzle blocks the locked door. Solve it to unlock the door and explore onward until you escape.
 
 ## ✨ Features
 
-- **Roblox-style journey**: choose an animal avatar that walks through 10 themed scenes (Mail Room, Lucky Casino, Hall of Mirrors…), with a level map, bouncy animations, confetti, and sound effects
-- **12 animal avatars** to pick from after sign-up
+- **Walk-around escape room**: a touch-controlled top-down world (canvas). Your animal hero explores 10 themed rooms (Mail Room, Lucky Casino, Hall of Mirrors…) connected by locked doors.
+- **iPad / touch first**: on-screen **virtual joystick**, **tap-to-move**, and keyboard (arrows / WASD) on desktop. Zoom/scroll locked during play.
+- **Puzzles as obstacles**: reach a room's terminal → puzzle pops up → answer correctly to unlock that room's door. Wrong answers teach you and let you retry.
+- **12 animal avatars** to pick from after sign-up.
 - **One game, two difficulty modes**
   - 🌱 **Easy** — designed for *kids & seniors* (everyday scams, gentle pace, hints)
   - ⚡ **Normal** — designed for *PMET / working adults* (deepfakes, BEC, AI data risks)
-- **10 challenges per level** (20 total), each a themed "door" with a teaching moment after every answer
-- **Participant registration** collecting: Full name, Email, Contact number, last 4 of NRIC/FIN, Gender, Occupation, and age/needs group
-- **Stores every option each participant selects** (which choice, right or wrong) for reporting
-- **Post-game feedback** (enjoyment, learning, recommendation, comments)
-- **Live timer, score, progress, hints**, and a polished neon UI that works on phones and tablets
-- **Data collection via Formspree** with an automatic **local backup + CSV/JSON export** fallback
+- **10 challenges per level** (20 total), each with a teaching moment after every answer.
+- **Participant registration** collecting: Full name, Email, Contact number, **last 4 characters of NRIC**, Gender, Occupation, and age/needs group.
+- **Stores every option each participant selects** (their choice + correctness + number of attempts) for reporting.
+- **Post-game feedback** (enjoyment, learning, recommendation, comments).
+- **Confetti, sound effects (mute toggle), live timer, key/score counter.**
+- **One combined submission**: front registration info + end-of-game score/answers + feedback are gathered, then sent together to **Formspree** in a single POST — with an automatic **local backup + CSV/JSON export** fallback.
 
 ## 🚀 Quick Start (local preview)
 
@@ -27,21 +29,33 @@ python3 -m http.server 8000
 # then visit http://localhost:8000
 ```
 
-## ⚙️ Setup: connect Formspree (required for central data collection)
+## 🧾 What gets sent, and when
 
-1. Create a free form at **https://formspree.io**.
-2. Copy your form endpoint — it looks like `https://formspree.io/f/abcdwxyz`.
-3. Open `assets/js/app.js` and replace the placeholder near the top:
+All data is captured first, then sent in **one** submission:
 
-   ```js
-   const FORMSPREE_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
-   ```
+1. **At sign-up (front):** name, email, contact, last-4 NRIC, gender, occupation, age group, consent.
+2. **During the game:** every option chosen per room, whether the first attempt was correct, and number of attempts.
+3. **At the end:** final score, time taken, and the feedback ratings/comments.
 
-4. Commit and deploy. Every submission will now be POSTed to your Formspree inbox/spreadsheet.
+When the player taps **Submit & Finish**, all three are merged into one record and POSTed to Formspree (and saved locally as backup). ✅ Yes — collecting info at the front and the score at the end and sending them together is exactly how it works.
 
-> Until this is set, the game still works fully — submissions are saved on the device and can be exported from the Organiser dashboard.
+## ⚙️ Formspree setup & troubleshooting
 
-> ⚠️ **Formspree free tier caps monthly submissions.** For a busy roadshow, check your plan limits in advance. The local backup ensures nothing is lost if the limit/internet is hit.
+The endpoint is already set in `assets/js/app.js`:
+
+```js
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mgojvvaz";
+```
+
+**If submissions aren't arriving, check these (in order):**
+
+1. **Activate the form (most common cause).** Formspree requires a one-time confirmation. Complete one full play-through on the **live site** so a real submission is sent, then open the inbox of the email tied to your Formspree account and click the **"Confirm"/activation** link Formspree sends. Until you do, submissions won't show up.
+2. **Test on the deployed site, not `file://`.** Open the GitHub Pages URL (https). Browser security/CORS can block form posts from a local file opened directly.
+3. **Open the browser console** (on the live site) and finish a game. The code logs the exact Formspree response, e.g. `Formspree returned HTTP 422 …`. The Thank-You screen also hints when the form isn't active yet.
+4. **Check your plan limits.** Formspree's free tier caps monthly submissions — a busy roadshow can hit it. The local backup + CSV export ensures nothing is lost.
+5. **Confirm the form ID** matches your Formspree dashboard (`mgojvvaz`).
+
+> Even if Formspree is down or unconfirmed, every submission is still saved on the device and can be exported from the Organiser dashboard (CSV/JSON).
 
 ## 🔐 Organiser dashboard (local backup)
 
@@ -57,9 +71,9 @@ This repo is `ddasdfl.github.io`. In **Settings → Pages**, set the source bran
 
 ```
 index.html              Game shell & all screens (welcome, sign-up, avatar, level, game, result, feedback, admin)
-assets/css/style.css    Playful Roblox-style theme, scenes & animations
-assets/js/data.js       Avatars, locations (scenes) & question bank — edit to customise
-assets/js/app.js        Game logic, journey/scene engine, sound, data capture, Formspree + export
+assets/css/style.css    Playful Roblox-style theme, world/joystick/modal styles & animations
+assets/js/data.js       Avatars, room locations & question bank — edit to customise
+assets/js/app.js        Top-down walk-around engine, controls, puzzles, sound, data capture, Formspree + export
 ```
 
 ## ✏️ Customising questions

@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Navigating AI & Digital Safety With Confidence — an interactive escape room game about scam prevention and AI awareness." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="description" content="Navigating AI & Digital Safety With Confidence — a walk-around escape room about scam prevention and AI awareness." />
   <title>Cyber Escape: Navigating AI &amp; Digital Safety</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -11,69 +13,45 @@
   <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 <body>
-  <!-- Animated background -->
   <div class="bg-sky" aria-hidden="true"></div>
   <div class="bg-clouds" aria-hidden="true"></div>
 
-  <!-- sound toggle -->
   <button class="sound-toggle" id="sound-toggle" title="Toggle sound" aria-label="Toggle sound">🔊</button>
 
   <main id="app">
 
-    <!-- ============ SCREEN: WELCOME ============ -->
+    <!-- ============ WELCOME ============ -->
     <section class="screen active" id="screen-welcome">
       <div class="card hero">
         <div class="badge">🛡️ Digital Safety Roadshow</div>
         <h1 class="title-pop">CYBER<br><span>ESCAPE</span></h1>
         <p class="subtitle">Navigating AI &amp; Digital Safety With Confidence</p>
         <p class="lede">
-          You're locked inside <strong>The Digital Vault</strong>! 🔒 Travel through 10 wild rooms —
-          a sneaky Mail Room, a Lucky Casino, a spooky Hall of Mirrors — and beat the scammer's
-          trap guarding each door. Pick the safe choice to unlock your way out!
+          You're trapped inside <strong>The Digital Vault</strong>! 🔒 Walk your animal hero through the rooms,
+          reach each glowing terminal, and solve the scam &amp; AI puzzle to unlock the door. Make it through
+          all the rooms to escape!
         </p>
         <button class="btn btn-primary btn-lg btn-bounce" id="btn-begin">▶ Play Now</button>
-        <p class="fineprint">Free to play • Pick an animal hero • Learn while you play</p>
+        <p class="fineprint">Free to play • Pick an animal hero • Works great on iPad</p>
       </div>
     </section>
 
-    <!-- ============ SCREEN: REGISTRATION ============ -->
+    <!-- ============ REGISTRATION ============ -->
     <section class="screen" id="screen-register">
       <div class="card">
         <h2 class="section-title">👤 Player Sign-Up</h2>
         <p class="muted">Tell us about yourself so the organisers can share safety tips and reach prize winners. Your info stays private.</p>
         <form id="register-form" novalidate>
           <div class="form-grid">
-            <label class="field">
-              <span>Full Name <i>*</i></span>
-              <input type="text" name="fullName" autocomplete="name" required />
+            <label class="field"><span>Full Name <i>*</i></span><input type="text" name="fullName" autocomplete="name" required /></label>
+            <label class="field"><span>Email <i>*</i></span><input type="email" name="email" autocomplete="email" required /></label>
+            <label class="field"><span>Contact Number <i>*</i></span><input type="tel" name="contact" inputmode="tel" autocomplete="tel" required /></label>
+            <label class="field"><span>Last 4 characters of NRIC <i>*</i></span><input type="text" name="nric4" inputmode="text" maxlength="4" pattern="[A-Za-z0-9]{4}" placeholder="e.g. 567A" title="Enter the last 4 characters of your NRIC, e.g. 567A" required /></label>
+            <label class="field"><span>Gender <i>*</i></span>
+              <select name="gender" required><option value="">Select…</option><option>Male</option><option>Female</option><option>Prefer not to say</option></select>
             </label>
-            <label class="field">
-              <span>Email <i>*</i></span>
-              <input type="email" name="email" autocomplete="email" required />
-            </label>
-            <label class="field">
-              <span>Contact Number <i>*</i></span>
-              <input type="tel" name="contact" inputmode="tel" autocomplete="tel" required />
-            </label>
-            <label class="field">
-              <span>Last 4 digits of NRIC/FIN <i>*</i></span>
-              <input type="text" name="nric4" inputmode="numeric" maxlength="4" pattern="[A-Za-z0-9]{4}" placeholder="e.g. 123A" required />
-            </label>
-            <label class="field">
-              <span>Gender <i>*</i></span>
-              <select name="gender" required>
-                <option value="">Select…</option>
-                <option>Male</option>
-                <option>Female</option>
-                <option>Prefer not to say</option>
-              </select>
-            </label>
-            <label class="field">
-              <span>Occupation <i>*</i></span>
-              <input type="text" name="occupation" autocomplete="organization-title" required />
-            </label>
-            <label class="field field-wide">
-              <span>Which group best describes you? <i>*</i></span>
+            <label class="field"><span>Occupation <i>*</i></span><input type="text" name="occupation" autocomplete="organization-title" required /></label>
+            <label class="field field-wide"><span>Which group best describes you? <i>*</i></span>
               <select name="ageGroup" required>
                 <option value="">Select…</option>
                 <option>Children (≤12 years)</option>
@@ -84,10 +62,7 @@
               </select>
             </label>
           </div>
-          <label class="checkbox">
-            <input type="checkbox" name="consent" required />
-            <span>I consent to the organisers collecting and using the information above for this event and follow-up. <i>*</i></span>
-          </label>
+          <label class="checkbox"><input type="checkbox" name="consent" required /><span>I consent to the organisers collecting and using the information above for this event and follow-up. <i>*</i></span></label>
           <p class="form-error" id="register-error" hidden></p>
           <div class="actions">
             <button type="button" class="btn btn-ghost" data-goto="welcome">← Back</button>
@@ -97,11 +72,11 @@
       </div>
     </section>
 
-    <!-- ============ SCREEN: AVATAR SELECT ============ -->
+    <!-- ============ AVATAR SELECT ============ -->
     <section class="screen" id="screen-avatar">
       <div class="card">
         <h2 class="section-title">🐾 Choose Your Animal Hero</h2>
-        <p class="muted">This buddy will travel the vault with you. Tap to pick!</p>
+        <p class="muted">This buddy will explore the vault with you. Tap to pick!</p>
         <div class="avatar-grid" id="avatar-grid"></div>
         <div class="actions">
           <button type="button" class="btn btn-ghost" data-goto="register">← Back</button>
@@ -110,88 +85,70 @@
       </div>
     </section>
 
-    <!-- ============ SCREEN: LEVEL SELECT ============ -->
+    <!-- ============ LEVEL SELECT ============ -->
     <section class="screen" id="screen-level">
       <div class="card">
         <h2 class="section-title">🎚️ Choose Your Challenge</h2>
         <p class="muted">Same vault, two difficulty modes. Pick the one that suits you.</p>
         <div class="level-grid">
           <button class="level-card" data-level="easy">
-            <div class="level-icon">🌱</div>
-            <h3>Easy Mode</h3>
+            <div class="level-icon">🌱</div><h3>Easy Mode</h3>
             <p class="level-tag">Kids &amp; Seniors</p>
             <p>Friendly, everyday scam scenarios with helpful hints. 10 rooms, gentle pace.</p>
             <span class="level-cta">Start Easy →</span>
           </button>
           <button class="level-card" data-level="normal">
-            <div class="level-icon">⚡</div>
-            <h3>Normal Mode</h3>
+            <div class="level-icon">⚡</div><h3>Normal Mode</h3>
             <p class="level-tag">PMET / Working Adults</p>
             <p>Trickier, workplace-grade threats: deepfakes, BEC, AI data risks. 10 rooms.</p>
             <span class="level-cta">Start Normal →</span>
           </button>
         </div>
-        <div class="actions">
-          <button type="button" class="btn btn-ghost" data-goto="avatar">← Back</button>
-        </div>
+        <div class="actions"><button type="button" class="btn btn-ghost" data-goto="avatar">← Back</button></div>
       </div>
     </section>
 
-    <!-- ============ SCREEN: GAME ============ -->
+    <!-- ============ GAME (walk-around world) ============ -->
     <section class="screen" id="screen-game">
-      <!-- journey map -->
-      <div class="journey" id="journey"></div>
-
-      <!-- HUD -->
-      <div class="game-hud">
-        <div class="hud-item"><span class="hud-label">Room</span><span class="hud-value"><span id="q-current">1</span>/<span id="q-total">10</span></span></div>
-        <div class="hud-item"><span class="hud-label">⏱ Time</span><span class="hud-value" id="timer">00:00</span></div>
-        <div class="hud-item"><span class="hud-label">🔓 Keys</span><span class="hud-value" id="score">0</span></div>
+      <div class="game-topbar">
+        <div class="tb-item"><span>Room</span><b><span id="q-current">1</span>/<span id="q-total">10</span></b></div>
+        <div class="tb-item"><span>⏱ Time</span><b id="timer">00:00</b></div>
+        <div class="tb-item"><span>🔓 Keys</span><b id="score">0</b></div>
       </div>
+      <div class="objective" id="objective">Walk to the glowing terminal and solve the puzzle to open the door! 🚪</div>
 
-      <!-- the scene the avatar walks through -->
-      <div class="scene" id="scene">
-        <div class="scene-decor" id="scene-decor" aria-hidden="true"></div>
-        <div class="scene-floor"></div>
-        <div class="scene-sign" id="scene-sign">The Mail Room</div>
-        <div class="avatar-char" id="avatar-char">🦊</div>
-        <div class="door" id="door">
-          <div class="door-panel" id="door-panel">
-            <span class="door-lock" id="door-lock">🔒</span>
-          </div>
-        </div>
+      <div class="world-wrap" id="world-wrap">
+        <canvas id="world"></canvas>
+        <div class="joystick" id="joystick"><div class="joystick-thumb" id="joystick-thumb"></div></div>
+        <button class="interact-btn" id="interact-btn" hidden>❓<small>Solve</small></button>
         <div class="confetti-layer" id="confetti-layer" aria-hidden="true"></div>
       </div>
+      <p class="controls-hint">🕹️ Drag the joystick (or tap where you want to walk). On a computer: arrow keys / WASD.</p>
 
-      <!-- challenge -->
-      <div class="card challenge-card">
-        <div class="speech" id="speech"><span class="speech-tail"></span><p id="question-text">Question goes here</p></div>
-        <div class="options" id="options"></div>
-
-        <div class="feedback" id="feedback" hidden>
-          <div class="feedback-head" id="feedback-head"></div>
-          <p class="feedback-body" id="feedback-body"></p>
-          <button class="btn btn-primary btn-bounce" id="btn-next">Next Room →</button>
-        </div>
-
-        <div class="game-foot">
-          <button class="btn btn-ghost btn-sm" id="btn-hint">💡 Hint</button>
-          <p class="hint-text" id="hint-text" hidden></p>
+      <!-- puzzle modal -->
+      <div class="puzzle-modal" id="puzzle-modal" hidden>
+        <div class="puzzle-card">
+          <div class="puzzle-room" id="puzzle-room">The Mail Room</div>
+          <p class="puzzle-q" id="question-text"></p>
+          <div class="options" id="options"></div>
+          <div class="feedback" id="feedback" hidden>
+            <div class="feedback-head" id="feedback-head"></div>
+            <p class="feedback-body" id="feedback-body"></p>
+            <button class="btn btn-primary btn-bounce" id="btn-next">Continue →</button>
+          </div>
+          <div class="game-foot"><button class="btn btn-ghost btn-sm" id="btn-hint">💡 Hint</button><p class="hint-text" id="hint-text" hidden></p></div>
         </div>
       </div>
     </section>
 
-    <!-- ============ SCREEN: RESULT ============ -->
+    <!-- ============ RESULT ============ -->
     <section class="screen" id="screen-result">
       <div class="card hero">
-        <div class="result-hero">
-          <span class="result-avatar" id="result-avatar">🦊</span>
-          <span class="result-emoji" id="result-emoji">🎉</span>
-        </div>
+        <div class="result-hero"><span class="result-avatar" id="result-avatar">🦊</span><span class="result-emoji" id="result-emoji">🎉</span></div>
         <h2 class="title-pop small" id="result-title">You Escaped!</h2>
         <p class="lede" id="result-lede"></p>
         <div class="result-stats">
-          <div class="stat"><span class="stat-num" id="stat-score">0/10</span><span class="stat-label">Keys Found</span></div>
+          <div class="stat"><span class="stat-num" id="stat-score">0/10</span><span class="stat-label">Keys (1st try)</span></div>
           <div class="stat"><span class="stat-num" id="stat-time">00:00</span><span class="stat-label">Time</span></div>
           <div class="stat"><span class="stat-num" id="stat-level">Easy</span><span class="stat-label">Mode</span></div>
         </div>
@@ -199,44 +156,25 @@
       </div>
     </section>
 
-    <!-- ============ SCREEN: FEEDBACK ============ -->
+    <!-- ============ FEEDBACK ============ -->
     <section class="screen" id="screen-feedback">
       <div class="card">
         <h2 class="section-title">💬 Quick Feedback</h2>
         <p class="muted">Help us improve the game. It takes 20 seconds.</p>
         <form id="feedback-form" novalidate>
-          <div class="field">
-            <span>How much did you enjoy the game?</span>
-            <div class="rating" id="rating-enjoy" data-name="enjoyment"></div>
-          </div>
-          <div class="field">
-            <span>How much did you learn about staying safe?</span>
-            <div class="rating" id="rating-learn" data-name="learning"></div>
-          </div>
-          <label class="field">
-            <span>How likely are you to recommend this to others?</span>
-            <select name="recommend">
-              <option value="">Select…</option>
-              <option>Very likely</option>
-              <option>Likely</option>
-              <option>Neutral</option>
-              <option>Unlikely</option>
-              <option>Very unlikely</option>
-            </select>
+          <div class="field"><span>How much did you enjoy the game?</span><div class="rating" id="rating-enjoy" data-name="enjoyment"></div></div>
+          <div class="field"><span>How much did you learn about staying safe?</span><div class="rating" id="rating-learn" data-name="learning"></div></div>
+          <label class="field"><span>How likely are you to recommend this to others?</span>
+            <select name="recommend"><option value="">Select…</option><option>Very likely</option><option>Likely</option><option>Neutral</option><option>Unlikely</option><option>Very unlikely</option></select>
           </label>
-          <label class="field">
-            <span>Any comments or suggestions? (optional)</span>
-            <textarea name="comments" rows="3" placeholder="Tell us what you think…"></textarea>
-          </label>
+          <label class="field"><span>Any comments or suggestions? (optional)</span><textarea name="comments" rows="3" placeholder="Tell us what you think…"></textarea></label>
           <p class="form-error" id="feedback-error" hidden></p>
-          <div class="actions">
-            <button type="submit" class="btn btn-primary">Submit &amp; Finish →</button>
-          </div>
+          <div class="actions"><button type="submit" class="btn btn-primary">Submit &amp; Finish →</button></div>
         </form>
       </div>
     </section>
 
-    <!-- ============ SCREEN: THANK YOU ============ -->
+    <!-- ============ THANK YOU ============ -->
     <section class="screen" id="screen-thanks">
       <div class="card hero">
         <div class="result-emoji">🙏</div>
@@ -247,7 +185,7 @@
       </div>
     </section>
 
-    <!-- ============ SCREEN: ADMIN ============ -->
+    <!-- ============ ADMIN ============ -->
     <section class="screen" id="screen-admin">
       <div class="card">
         <h2 class="section-title">🔐 Organiser Dashboard</h2>
@@ -259,9 +197,7 @@
           <button class="btn btn-danger" id="btn-clear-data">🗑 Clear Local Data</button>
           <button class="btn btn-ghost" data-goto="welcome">← Back to Game</button>
         </div>
-        <div class="admin-table-wrap">
-          <table class="admin-table" id="admin-table"></table>
-        </div>
+        <div class="admin-table-wrap"><table class="admin-table" id="admin-table"></table></div>
       </div>
     </section>
 
