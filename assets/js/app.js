@@ -36,6 +36,23 @@ const fmtTime = t => `${String(Math.floor(t/60)).padStart(2,"0")}:${String(t%60)
 const escapeHtml = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
+/* ---- on-screen error reporter (so device-specific failures are visible) ---- */
+let _errBox = null;
+function showErr(msg) {
+  try {
+    if (!_errBox) {
+      _errBox = document.createElement("div");
+      _errBox.style.cssText = "position:fixed;left:8px;right:8px;bottom:8px;z-index:99999;background:#b00020;color:#fff;font:13px/1.45 ui-monospace,Menlo,monospace;padding:12px 14px;border-radius:12px;max-height:45vh;overflow:auto;white-space:pre-wrap;box-shadow:0 6px 20px rgba(0,0,0,.4)";
+      (document.body || document.documentElement).appendChild(_errBox);
+    }
+    _errBox.textContent = "⚠ " + msg + "\n\n(Please screenshot this and send it back.)";
+    _errBox.style.display = "block";
+  } catch (e) {}
+}
+function showFatal(e) { showErr("Game error: " + (e && (e.stack || e.message) || e)); }
+window.addEventListener("error", e => showErr((e.message || "Script error") + (e.filename ? "  @ " + e.filename.split("/").pop() + ":" + e.lineno : "")));
+window.addEventListener("unhandledrejection", e => showErr("Promise: " + (e.reason && (e.reason.message || e.reason) || "unknown")));
+
 /* ---------- 4) SOUND (Web Audio) ---------- */
 let audioCtx = null;
 function beep(freqs, dur = 0.12, type = "square", gain = 0.07) {
@@ -363,27 +380,32 @@ function roundRect(x, y, w, h, r) {
 /* ---- main loop ---- */
 function loop(now) {
   if (!world) return;
-  if (!state.paused) {
-    let vx = input.x, vy = input.y;
-    // tap-to-move
-    if (moveTarget && !vx && !vy) {
-      const dx = moveTarget.x - world.player.x, dy = moveTarget.y - world.player.y;
-      const dist = Math.hypot(dx, dy);
-      if (dist < 6) moveTarget = null; else { vx = dx/dist; vy = dy/dist; }
+  try {
+    if (viewW < 10 || viewH < 10) resizeCanvas();   // recover if size wasn't ready
+    if (!state.paused) {
+      let vx = input.x, vy = input.y;
+      // tap-to-move
+      if (moveTarget && !vx && !vy) {
+        const dx = moveTarget.x - world.player.x, dy = moveTarget.y - world.player.y;
+        const dist = Math.hypot(dx, dy);
+        if (dist < 6) moveTarget = null; else { vx = dx/dist; vy = dy/dist; }
+      }
+      const mag = Math.hypot(vx, vy);
+      if (mag > 0) {
+        const nx = vx/mag, ny = vy/mag;
+        const SPEED = 3.0;
+        if (Math.abs(vx) > 0.05) world.player.facing = vx < 0 ? -1 : 1;
+        tryMove(nx * SPEED * Math.min(mag,1), ny * SPEED * Math.min(mag,1));
+        if (now - lastStep > 230) { sfx.step(); lastStep = now; }
+      }
+      checkInteract();
+      checkExit();
     }
-    const mag = Math.hypot(vx, vy);
-    if (mag > 0) {
-      const nx = vx/mag, ny = vy/mag;
-      const SPEED = 3.0;
-      if (Math.abs(vx) > 0.05) world.player.facing = vx < 0 ? -1 : 1;
-      tryMove(nx * SPEED * Math.min(mag,1), ny * SPEED * Math.min(mag,1));
-      if (now - lastStep > 230) { sfx.step(); lastStep = now; }
-    }
-    checkInteract();
-    checkExit();
+    updateCam();
+    render(now);
+  } catch (e) {
+    showFatal(e); cancelAnimationFrame(raf); raf = null; return;
   }
-  updateCam();
-  render(now);
   raf = requestAnimationFrame(loop);
 }
 
@@ -400,23 +422,35 @@ function startGame(level) {
   $("#q-current").textContent = "1";
   $("#score").textContent = "0";
 
-  buildWorld();
+  try { buildWorld(); } catch (e) { showFatal(e); return; }
   showScreen("game");
-  // ensure layout is applied before measuring
-  requestAnimationFrame(() => {
-    resizeCanvas();
-    updateCam();
-    state.startTime = Date.now(); state.elapsed = 0;
-    clearInterval(state.timerId); $("#timer").textContent = "00:00";
-    state.timerId = setInterval(() => {
-      state.elapsed = Math.floor((Date.now() - state.startTime)/1000);
-      $("#timer").textContent = fmtTime(state.elapsed);
-    }, 1000);
-    cancelAnimationFrame(raf);
-    raf = requestAnimationFrame(loop);
-  });
+
+  state.startTime = Date.now(); state.elapsed = 0;
+  clearInterval(state.timerId); $("#timer").textContent = "00:00";
+  state.timerId = setInterval(() => {
+    state.elapsed = Math.floor((Date.now() - state.startTime)/1000);
+    $("#timer").textContent = fmtTime(state.elapsed);
+  }, 1000);
+
+  // Start rendering as soon as the canvas has a real size (Safari sometimes
+  // reports 0 on the first frame after a display change — retry a few frames).
+  cancelAnimationFrame(raf);
+  startLoopWhenReady(0);
+}
+function startLoopWhenReady(attempt) {
+  resizeCanvas();
+  if ((viewW < 10 || viewH < 10) && attempt < 90) {
+    raf = requestAnimationFrame(() => startLoopWhenReady(attempt + 1));
+    return;
+  }
+  updateCam();
+  raf = requestAnimationFrame(loop);
 }
 window.addEventListener("resize", () => { if (world && $("#screen-game").classList.contains("active")) resizeCanvas(); });
+window.addEventListener("orientationchange", () => { if (world && $("#screen-game").classList.contains("active")) setTimeout(resizeCanvas, 200); });
+if (window.ResizeObserver) {
+  try { new ResizeObserver(() => { if (world && $("#screen-game").classList.contains("active")) resizeCanvas(); }).observe($("#world-wrap")); } catch (e) {}
+}
 
 /* =====================================================================
    12) INPUT — joystick, tap-to-move, keyboard
