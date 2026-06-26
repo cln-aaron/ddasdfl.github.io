@@ -77,7 +77,7 @@ const sfx = {
   win: () => beep([523,659,784,1046,1318], 0.13, "square", 0.08),
   unlock: () => beep([660,880], 0.1, "triangle", 0.07)
 };
-/* ---- chiptune background music (generated, no files) ---- */
+/* ---- chiptune background music (synthesised in-browser, no audio files) ---- */
 const music = {
   timer: null, step: 0, beat: 0,
   // Cheerful C-major-ish loop. 0 = rest. 16 steps per bar.
