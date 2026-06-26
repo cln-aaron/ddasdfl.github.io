@@ -19,7 +19,8 @@ const state = {
   startTime: null, elapsed: 0, timerId: null,
   paused: false,            // true while a puzzle modal is open
   nearTerminal: null,
-  soundOn: true
+  soundOn: true,
+  lang: "en"                // active language: en | zh | ms | ta
 };
 
 /* ---------- 3) HELPERS ---------- */
@@ -35,6 +36,24 @@ const fmtTime = t => `${String(Math.floor(t/60)).padStart(2,"0")}:${String(t%60)
 const escapeHtml = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const shuffledIdx = n => { const a = [...Array(n).keys()]; for (let i = n - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+/* ---- i18n: t(key) for UI strings, tx(obj) for {en,zh,ms,ta} game data ---- */
+function t(key) {
+  const d = (typeof I18N !== "undefined" && I18N[state.lang]) || {};
+  if (key in d) return d[key];
+  return (typeof I18N !== "undefined" && I18N.en[key] != null) ? I18N.en[key] : key;
+}
+function tx(o) { return (o && (o[state.lang] || o.en)) || ""; }
+function applyLang(lang) {
+  state.lang = lang;
+  try { document.documentElement.lang = lang; } catch (e) {}
+  $$("[data-i18n]").forEach(el => { el.textContent = t(el.getAttribute("data-i18n")); });
+  $$("[data-i18n-html]").forEach(el => { el.innerHTML = t(el.getAttribute("data-i18n-html")); });
+  $$("[data-i18n-ph]").forEach(el => { el.setAttribute("placeholder", t(el.getAttribute("data-i18n-ph"))); });
+  $$(".lang-btn").forEach(b => b.classList.toggle("active", b.dataset.lang === lang));
+  buildAvatars();
+  const obj = $("#objective"); if (obj) obj.textContent = t("game.objective");
+}
 
 /* ---- on-screen error reporter (so device-specific failures are visible) ---- */
 let _errBox = null;
@@ -128,12 +147,20 @@ $("#sound-toggle").addEventListener("click", () => {
 
 /* ---------- 5) NAV ---------- */
 $$("[data-goto]").forEach(b => b.addEventListener("click", () => { sfx.click(); showScreen(b.dataset.goto); }));
+/* language selector (first screen) */
+$$(".lang-btn").forEach(b => b.addEventListener("click", () => {
+  applyLang(b.dataset.lang);
+  try { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
+  sfx.click();
+  showScreen("welcome");
+}));
+
 $("#btn-begin").addEventListener("click", () => { sfx.click(); showScreen("consent"); });
 
 /* consent (PDPA) → particulars */
 $("#btn-consent-next").addEventListener("click", () => {
   const cb = $("#consent-check"), err = $("#consent-error");
-  if (!cb.checked) { err.textContent = "Please tick the box to consent before continuing."; err.hidden = false; return; }
+  if (!cb.checked) { err.textContent = t("consent.error"); err.hidden = false; return; }
   err.hidden = true; sfx.click(); showScreen("register");
 });
 
@@ -141,7 +168,7 @@ $("#btn-consent-next").addEventListener("click", () => {
 $("#register-form").addEventListener("submit", e => {
   e.preventDefault();
   const form = e.target, err = $("#register-error"); err.hidden = true;
-  if (!form.checkValidity()) { err.textContent = "Please fill in all required fields (marked *) correctly."; err.hidden = false; form.reportValidity(); return; }
+  if (!form.checkValidity()) { err.textContent = t("reg.error"); err.hidden = false; form.reportValidity(); return; }
   const d = Object.fromEntries(new FormData(form).entries());
   state.player = {
     fullName: d.fullName.trim(), age: d.age, email: d.email.trim(),
@@ -156,7 +183,8 @@ function buildAvatars() {
   AVATARS.forEach(av => {
     const b = document.createElement("button");
     b.type = "button"; b.className = "avatar-pick";
-    b.innerHTML = `<span class="ava-emoji">${av.emoji}</span><span class="ava-name">${escapeHtml(av.name)}</span><span class="ava-trait">${escapeHtml(av.trait)}</span>`;
+    b.innerHTML = `<span class="ava-emoji">${av.emoji}</span><span class="ava-name">${escapeHtml(tx(av.name))}</span><span class="ava-trait">${escapeHtml(tx(av.trait))}</span>`;
+    if (state.avatar && state.avatar.id === av.id) b.classList.add("selected");
     b.addEventListener("click", () => {
       state.avatar = av;
       $$(".avatar-pick", grid).forEach(x => x.classList.remove("selected"));
@@ -312,9 +340,10 @@ function render(now) {
     // sign
     const sy = TILE * 1.0 - cam.y;
     ctx.font = "700 15px 'Baloo 2', sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-    const tw = ctx.measureText(loc.name).width + 22;
+    const locName = tx(loc.name);
+    const tw = ctx.measureText(locName).width + 22;
     ctx.fillStyle = "rgba(31,37,71,.78)"; roundRect(cx - tw/2, sy - 14, tw, 26, 13); ctx.fill();
-    ctx.fillStyle = "#fff"; ctx.fillText(loc.name, cx, sy);
+    ctx.fillStyle = "#fff"; ctx.fillText(locName, cx, sy);
     // a couple decor emojis
     ctx.font = "26px serif";
     ctx.fillText(loc.decor[0], (r*ROOM_W + 1.6)*TILE - cam.x, (ROOM_H-2.2)*TILE - cam.y);
@@ -354,7 +383,7 @@ function render(now) {
   ctx.fillText(state.avatar.emoji, 0, 0); ctx.restore();
   // name tag
   ctx.font = "600 11px 'Fredoka', sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-  const nm = state.avatar.name.split(" ")[0];
+  const nm = tx(state.avatar.name).split(" ")[0];
   const nw = ctx.measureText(nm).width + 14;
   ctx.fillStyle = "rgba(123,92,255,.92)"; roundRect(px - nw/2, py + TILE*0.42, nw, 16, 8); ctx.fill();
   ctx.fillStyle = "#fff"; ctx.fillText(nm, px, py + TILE*0.42 + 8);
@@ -468,13 +497,7 @@ function loop(now) {
    ===================================================================== */
 function startGame(level) {
   state.level = level;
-  // Curated 5 rooms per level. Each set includes AI-safety question(s) and
-  // maps to rooms: Mail Room, Phone Booth, Link Tunnel, Friendship Park, Hall of Mirrors.
-  const PLAY_SET = {
-    easy:   [0, 1, 2, 3, 9],   // prize, OTP, link, stranger, AI deepfake call (Hall of Mirrors)
-    normal: [0, 1, 3, 8, 9]    // BEC, AI voice-clone, lookalike URL, romance, AI misinformation
-  };
-  state.questions = PLAY_SET[level].map(i => QUESTIONS[level][i]);
+  state.questions = QUESTIONS[level];   // 5 rooms per level (incl. AI-safety questions)
   state.score = 0; state.answerMap = {}; state.paused = false; moveTarget = null;
   input.x = 0; input.y = 0;
 
@@ -574,9 +597,9 @@ function openPuzzle(roomIndex) {
   sfx.click();
   const q = state.questions[roomIndex];
   const loc = LOCATIONS[roomIndex % LOCATIONS.length];
-  $("#puzzle-room").textContent = loc.name;
+  $("#puzzle-room").textContent = tx(loc.name);
   $("#q-current").textContent = roomIndex + 1;
-  $("#question-text").textContent = q.prompt;
+  $("#question-text").textContent = tx(q.prompt);
 
   const optWrap = $("#options"); optWrap.innerHTML = "";
   // Randomise option order so the correct answer isn't always in the same spot.
@@ -585,12 +608,12 @@ function openPuzzle(roomIndex) {
     const btn = document.createElement("button");
     btn.className = "option"; btn.type = "button";
     btn.dataset.orig = origIdx;
-    btn.innerHTML = `<span class="option-key">${String.fromCharCode(65+pos)}</span><span class="option-text">${escapeHtml(q.options[origIdx])}</span>`;
+    btn.innerHTML = `<span class="option-key">${String.fromCharCode(65+pos)}</span><span class="option-text">${escapeHtml(tx(q.options[origIdx]))}</span>`;
     btn.addEventListener("click", () => answer(origIdx));
     optWrap.appendChild(btn);
   });
   $("#feedback").hidden = true;
-  $("#hint-text").hidden = true; $("#hint-text").textContent = q.hint; $("#btn-hint").disabled = false;
+  $("#hint-text").hidden = true; $("#hint-text").textContent = tx(q.hint); $("#btn-hint").disabled = false;
   $("#puzzle-modal").hidden = false;
 }
 
@@ -602,17 +625,18 @@ function answer(choiceIndex) {
   const loc = LOCATIONS[r % LOCATIONS.length];
   const correct = choiceIndex === q.answer;
 
-  // record (first attempt is the genuine selection; track attempts)
+  // record (first attempt is the genuine selection; track attempts).
+  // Store canonical ENGLISH text so exported data is consistent across languages.
   let rec = state.answerMap[r];
   if (!rec) {
-    rec = { door: r+1, room: loc.name, question: q.prompt,
-            chosen: choiceIndex, chosenText: q.options[choiceIndex],
-            correctIndex: q.answer, correctText: q.options[q.answer],
+    rec = { door: r+1, room: loc.name.en, question: q.prompt.en,
+            chosen: choiceIndex, chosenText: q.options[choiceIndex].en,
+            correctIndex: q.answer, correctText: q.options[q.answer].en,
             correct, attempts: 1 };
     state.answerMap[r] = rec;
     if (correct) { state.score++; $("#score").textContent = state.score; }
   } else {
-    rec.attempts++; rec.lastChosen = choiceIndex; rec.lastChosenText = q.options[choiceIndex];
+    rec.attempts++; rec.lastChosen = choiceIndex; rec.lastChosenText = q.options[choiceIndex].en;
   }
 
   const opts = $$("#options .option");
@@ -626,14 +650,14 @@ function answer(choiceIndex) {
   if (correct) {
     sfx.correct(); setTimeout(sfx.unlock, 180); burstConfetti();
     opts.forEach(b => b.disabled = true);
-    head.className = "feedback-head ok"; head.textContent = "🔓 Correct! The door unlocks!";
-    $("#btn-next").textContent = (r === state.questions.length - 1) ? "🏆 Escape!" : "Continue →";
+    head.className = "feedback-head ok"; head.textContent = t("game.correct");
+    $("#btn-next").textContent = (r === state.questions.length - 1) ? t("game.finish") : t("game.continue");
   } else {
     sfx.wrong();
-    head.className = "feedback-head no"; head.textContent = "🔒 Not quite — the door stays locked!";
-    $("#btn-next").textContent = "Try Again";
+    head.className = "feedback-head no"; head.textContent = t("game.wrong");
+    $("#btn-next").textContent = t("game.tryagain");
   }
-  $("#feedback-body").textContent = q.explain;
+  $("#feedback-body").textContent = tx(q.explain);
   $("#btn-hint").disabled = true;
   fb.hidden = false;
   fb._correct = correct;
@@ -650,7 +674,7 @@ $("#btn-next").addEventListener("click", () => {
     state.paused = false;
     if (r === state.questions.length - 1) { finishGame(); return; }
     // nudge objective
-    $("#objective").textContent = "Door unlocked! 🔓 Walk to the next glowing terminal →";
+    $("#objective").textContent = t("game.objectiveNext");
   } else {
     // let them retry the same puzzle
     openPuzzle(r);
@@ -684,13 +708,12 @@ function finishGame() {
   sfx.win();
   $("#result-avatar").textContent = state.avatar.emoji;
   $("#result-emoji").textContent = passed ? "🎉" : "🧩";
-  $("#result-title").textContent = "You Escaped!";
-  $("#result-lede").textContent = passed
-    ? `Amazing work, ${state.avatar.name}! You explored every room, beat the scams and AI traps, and escaped the Digital Vault. You're navigating the digital world with confidence!`
-    : `You escaped, ${state.avatar.name}! A few puzzles took more than one try — review the tips you learned, because every scam you can spot keeps you safer!`;
+  $("#result-title").textContent = t("result.title");
+  const nm = tx(state.avatar.name);
+  $("#result-lede").textContent = (passed ? t("result.passLede") : t("result.failLede")).replace("{name}", nm);
   $("#stat-score").textContent = `${state.score}/${total}`;
   $("#stat-time").textContent = fmtTime(state.elapsed);
-  $("#stat-level").textContent = state.level === "easy" ? "Easy" : "Normal";
+  $("#stat-level").textContent = state.level === "easy" ? t("level.easy") : t("level.normal");
   showScreen("result");
 }
 
@@ -701,22 +724,15 @@ $("#feedback-form").addEventListener("submit", async e => {
   e.preventDefault();
   const form = e.target, err = $("#feedback-error"); err.hidden = true;
   if (!form.checkValidity()) {
-    err.textContent = "Please answer all questions (marked *) before submitting.";
+    err.textContent = t("fb.error");
     err.hidden = false; form.reportValidity(); return;
   }
   const data = Object.fromEntries(new FormData(form).entries());
   const record = buildRecord(data);
   saveLocal(record);
-  $("#thanks-status").textContent = "Submitting your responses…"; sfx.win(); showScreen("thanks");
+  $("#thanks-status").textContent = t("thanks.submitting"); sfx.win(); showScreen("thanks");
   const result = await sendToFormspree(record);
-  if (result.ok) {
-    $("#thanks-status").textContent = "✅ Your responses have been recorded. Thank you!";
-  } else if (result.reason === "http-422" || result.reason === "http-403") {
-    // Most common: the Formspree form hasn't been confirmed/activated yet.
-    $("#thanks-status").textContent = "✅ Saved on this device. (Online form not active yet — organiser: please confirm the Formspree form via the activation email.)";
-  } else {
-    $("#thanks-status").textContent = "✅ Saved on this device. (Online submission unavailable right now — organisers will sync it later.)";
-  }
+  $("#thanks-status").textContent = result.ok ? t("thanks.ok") : t("thanks.saved");
 });
 
 /* =====================================================================
@@ -729,7 +745,8 @@ function buildRecord(fb) {
     fullName: state.player.fullName, age: state.player.age, email: state.player.email,
     contact: state.player.contact, demographic: state.player.demographic,
     consent: state.player.consent ? "Yes" : "No",
-    avatar: state.avatar ? state.avatar.name : "",
+    language: state.lang,
+    avatar: state.avatar ? state.avatar.name.en : "",
     level: state.level, score: state.score, totalQuestions: state.questions.length,
     timeSeconds: state.elapsed, timeFormatted: fmtTime(state.elapsed),
     answers,
@@ -781,8 +798,8 @@ $("#btn-play-again").addEventListener("click", () => {
   const cc = $("#consent-check"); if (cc) cc.checked = false;
   $$(".avatar-pick").forEach(x => x.classList.remove("selected"));
   $("#btn-avatar-next").disabled = true;
-  $("#objective").textContent = "Walk onto the glowing terminal to face its puzzle and unlock the door! 🚪";
-  showScreen("welcome");
+  $("#objective").textContent = t("game.objective");
+  showScreen("language");   // a new participant picks their language first
 });
 
 /* =====================================================================
@@ -813,7 +830,7 @@ function renderAdmin() {
 }
 $("#btn-export-csv").addEventListener("click", () => {
   const all = getLocal(); if (!all.length) return alert("No data to export.");
-  const cols = ["submittedAt","fullName","age","email","contact","demographic","consent","avatar","level","score","totalQuestions","timeSeconds","timeFormatted","fbSatisfaction","fbUsefulness","fbMotivation","fbWouldApply","fbInterestedOther","fbKeenAreas","fbOtherComments","answers"];
+  const cols = ["submittedAt","language","fullName","age","email","contact","demographic","consent","avatar","level","score","totalQuestions","timeSeconds","timeFormatted","fbSatisfaction","fbUsefulness","fbMotivation","fbWouldApply","fbInterestedOther","fbKeenAreas","fbOtherComments","answers"];
   const esc = v => `"${(typeof v === "object" ? JSON.stringify(v) : String(v ?? "")).replace(/"/g, '""')}"`;
   const lines = [cols.join(",")]; all.forEach(r => lines.push(cols.map(c => esc(r[c])).join(",")));
   download(lines.join("\n"), "cyber-escape-data.csv", "text/csv");

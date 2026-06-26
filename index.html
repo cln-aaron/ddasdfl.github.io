@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css?v=13" />
+  <link rel="stylesheet" href="assets/css/style.css?v=14" />
 </head>
 <body>
   <div class="bg-sky" aria-hidden="true"></div>
@@ -20,48 +20,59 @@
 
   <main id="app">
 
-    <!-- ============ WELCOME ============ -->
-    <section class="screen active" id="screen-welcome">
+    <!-- ============ LANGUAGE (first screen) ============ -->
+    <section class="screen active" id="screen-language">
       <div class="card hero">
-        <div class="badge">🛡️ Digital Safety Roadshow</div>
+        <div class="result-emoji">🌐</div>
+        <h2 class="section-title" data-i18n="lang.title">Choose your language</h2>
+        <p class="muted" data-i18n="lang.sub">选择语言 · Pilih bahasa · மொழியைத் தேர்ந்தெடுக்கவும்</p>
+        <div class="lang-grid">
+          <button type="button" class="btn btn-primary lang-btn" data-lang="en">English</button>
+          <button type="button" class="btn btn-primary lang-btn" data-lang="zh">简体中文</button>
+          <button type="button" class="btn btn-primary lang-btn" data-lang="ms">Bahasa Melayu</button>
+          <button type="button" class="btn btn-primary lang-btn" data-lang="ta">தமிழ்</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ WELCOME ============ -->
+    <section class="screen" id="screen-welcome">
+      <div class="card hero">
+        <div class="badge" data-i18n="welcome.badge">🛡️ Digital Safety Roadshow</div>
         <h1 class="title-pop">CYBER<br><span>ESCAPE</span></h1>
-        <p class="subtitle">Navigating AI &amp; Digital Safety With Confidence</p>
-        <p class="lede">
-          You're trapped inside <strong>The Digital Vault</strong>! 🔒 Walk your animal hero through the rooms,
-          reach each glowing terminal, and solve the scam &amp; AI puzzle to unlock the door. Make it through
-          all the rooms to escape!
-        </p>
-        <button class="btn btn-primary btn-lg btn-bounce" id="btn-begin">▶ Play Now</button>
-        <p class="fineprint">Free to play • Pick an animal hero • Works great on iPad</p>
+        <p class="subtitle" data-i18n="welcome.subtitle">Navigating AI &amp; Digital Safety With Confidence</p>
+        <p class="lede" data-i18n="welcome.lede">You're trapped inside The Digital Vault! Walk your animal hero through the rooms, reach each glowing terminal, and solve the scam &amp; AI puzzle to unlock the door.</p>
+        <button class="btn btn-primary btn-lg btn-bounce" id="btn-begin" data-i18n="welcome.play">▶ Play Now</button>
+        <p class="fineprint" data-i18n="welcome.fineprint">Free to play • Pick an animal hero • Works great on iPad</p>
       </div>
     </section>
 
     <!-- ============ CONSENT (PDPA) ============ -->
     <section class="screen" id="screen-consent">
       <div class="card">
-        <h2 class="section-title">📋 Collection, Use and Disclosure of Personal Data</h2>
+        <h2 class="section-title" data-i18n="consent.title">Collection, Use and Disclosure of Personal Data</h2>
         <div class="consent-body">
           <ol>
-            <li>I consent to the collection, use and retention of my personal data by DDAS and partner organisations, for the purposes of processing, servicing and managing my registration for this event.</li>
-            <li>I will inform DDAS immediately of any changes to my contact details and/or personal data in order to enable DDAS and partner organisations, to contact me for all matters relating to this event.</li>
-            <li>I consent to be contacted by DDAS and partner organisations, via email, text messages, calls and/or post for matters related to my registration for this event and other DDAS membership matters (if applicable), as well as to obtain my opinion/feedback on such matters.</li>
-            <li>I consent to the disclosure of my personal data by DDAS and partner organisations, to authorise third parties for the latter to collect, use and retain my personal data for the purpose of processing, servicing and managing my registration for and participation in this event.</li>
-            <li>I understand that photography and/or videography may be taken during this event for news and publicity purposes and may be used for print and on online/electronic platforms.</li>
-            <li>I acknowledge that DDAS and partner organisations, owns all rights to the photographs and video recordings.</li>
-            <li>If I do not wish to have any photographs or video recordings taken of me, I will inform DDAS before the commencement of this event.</li>
+            <li data-i18n="consent.1"></li>
+            <li data-i18n="consent.2"></li>
+            <li data-i18n="consent.3"></li>
+            <li data-i18n="consent.4"></li>
+            <li data-i18n="consent.5"></li>
+            <li data-i18n="consent.6"></li>
+            <li data-i18n="consent.7"></li>
           </ol>
-          <p>By completing the form I consent to the following uses of the information provided herein by me to the Digital Defence Alliance Singapore and Infocomm Media Development Authority of Singapore (IMDA):</p>
+          <p data-i18n="consent.intro"></p>
           <ul>
-            <li>To verify information provided by me when participating in activities organised by the Digital Defence Alliance Singapore.</li>
-            <li>For the compilation of any statistics by IMDA, provided that the statistics involve techniques to prevent the identification of individuals by any foreseeable means.</li>
+            <li data-i18n="consent.use1"></li>
+            <li data-i18n="consent.use2"></li>
           </ul>
-          <p>For enquiries on personal data protection matters, please email to <a href="mailto:hello@ddas.sg">hello@ddas.sg</a>.</p>
+          <p data-i18n-html="consent.contact"></p>
         </div>
-        <label class="checkbox"><input type="checkbox" id="consent-check" /><span>I have read and consent to the above. <i>*</i></span></label>
+        <label class="checkbox"><input type="checkbox" id="consent-check" /><span><span data-i18n="consent.check">I have read and consent to the above.</span> <i>*</i></span></label>
         <p class="form-error" id="consent-error" hidden></p>
         <div class="actions">
-          <button type="button" class="btn btn-ghost" data-goto="welcome">← Back</button>
-          <button type="button" class="btn btn-primary" id="btn-consent-next">Next →</button>
+          <button type="button" class="btn btn-ghost" data-goto="welcome" data-i18n="common.back">← Back</button>
+          <button type="button" class="btn btn-primary" id="btn-consent-next" data-i18n="consent.next">Next →</button>
         </div>
       </div>
     </section>
@@ -69,27 +80,27 @@
     <!-- ============ PERSONAL PARTICULARS ============ -->
     <section class="screen" id="screen-register">
       <div class="card">
-        <h2 class="section-title">👤 Personal Particulars</h2>
-        <p class="muted">Tell us more about yourself!</p>
+        <h2 class="section-title" data-i18n="reg.title">Personal Particulars</h2>
+        <p class="muted" data-i18n="reg.subtitle">Tell us more about yourself!</p>
         <form id="register-form" novalidate>
           <div class="form-grid">
-            <label class="field"><span>Full Name <i>*</i></span><input type="text" name="fullName" autocomplete="name" required /></label>
-            <label class="field"><span>Age <i>*</i></span><input type="number" name="age" inputmode="numeric" min="1" max="120" required /></label>
-            <label class="field"><span>Email <i>*</i></span><input type="email" name="email" autocomplete="email" required /></label>
-            <label class="field"><span>Contact Number <i>*</i></span><input type="tel" name="contact" inputmode="tel" autocomplete="tel" required /></label>
+            <label class="field"><span><span data-i18n="reg.fullName">Full Name</span> <i>*</i></span><input type="text" name="fullName" autocomplete="name" required /></label>
+            <label class="field"><span><span data-i18n="reg.age">Age</span> <i>*</i></span><input type="number" name="age" inputmode="numeric" min="1" max="120" required /></label>
+            <label class="field"><span><span data-i18n="reg.email">Email</span> <i>*</i></span><input type="email" name="email" autocomplete="email" required /></label>
+            <label class="field"><span><span data-i18n="reg.contact">Contact Number</span> <i>*</i></span><input type="tel" name="contact" inputmode="tel" autocomplete="tel" required /></label>
           </div>
           <fieldset class="radio-group field-wide">
-            <legend>Participant demographics <i>*</i></legend>
-            <label class="radio-row"><input type="radio" name="demographic" value="Children (≤12 years)" required /><span>Children (≤12 years)</span></label>
-            <label class="radio-row"><input type="radio" name="demographic" value="Youth (13-25 years)" /><span>Youth (13-25 years)</span></label>
-            <label class="radio-row"><input type="radio" name="demographic" value="Adults (26-59 years)" /><span>Adults (26-59 years)</span></label>
-            <label class="radio-row"><input type="radio" name="demographic" value="Seniors (≥60 years)" /><span>Seniors (≥60 years)</span></label>
-            <label class="radio-row"><input type="radio" name="demographic" value="Persons with Disabilities" /><span>Persons with Disabilities</span></label>
+            <legend><span data-i18n="reg.demographic">Participant demographics</span> <i>*</i></legend>
+            <label class="radio-row"><input type="radio" name="demographic" value="Children (≤12 years)" required /><span data-i18n="demo.children">Children (≤12 years)</span></label>
+            <label class="radio-row"><input type="radio" name="demographic" value="Youth (13-25 years)" /><span data-i18n="demo.youth">Youth (13-25 years)</span></label>
+            <label class="radio-row"><input type="radio" name="demographic" value="Adults (26-59 years)" /><span data-i18n="demo.adults">Adults (26-59 years)</span></label>
+            <label class="radio-row"><input type="radio" name="demographic" value="Seniors (≥60 years)" /><span data-i18n="demo.seniors">Seniors (≥60 years)</span></label>
+            <label class="radio-row"><input type="radio" name="demographic" value="Persons with Disabilities" /><span data-i18n="demo.pwd">Persons with Disabilities</span></label>
           </fieldset>
           <p class="form-error" id="register-error" hidden></p>
           <div class="actions">
-            <button type="button" class="btn btn-ghost" data-goto="consent">← Back</button>
-            <button type="submit" class="btn btn-primary">Pick My Hero →</button>
+            <button type="button" class="btn btn-ghost" data-goto="consent" data-i18n="common.back">← Back</button>
+            <button type="submit" class="btn btn-primary" data-i18n="reg.next">Pick My Hero →</button>
           </div>
         </form>
       </div>
@@ -98,12 +109,12 @@
     <!-- ============ AVATAR SELECT ============ -->
     <section class="screen" id="screen-avatar">
       <div class="card">
-        <h2 class="section-title">🐾 Choose Your Animal Hero</h2>
-        <p class="muted">This buddy will explore the vault with you. Tap to pick!</p>
+        <h2 class="section-title" data-i18n="avatar.title">Choose Your Animal Hero</h2>
+        <p class="muted" data-i18n="avatar.subtitle">This buddy will explore the vault with you. Tap to pick!</p>
         <div class="avatar-grid" id="avatar-grid"></div>
         <div class="actions">
-          <button type="button" class="btn btn-ghost" data-goto="register">← Back</button>
-          <button type="button" class="btn btn-primary" id="btn-avatar-next" disabled>Choose Level →</button>
+          <button type="button" class="btn btn-ghost" data-goto="register" data-i18n="common.back">← Back</button>
+          <button type="button" class="btn btn-primary" id="btn-avatar-next" disabled data-i18n="avatar.next">Choose Level →</button>
         </div>
       </div>
     </section>
@@ -111,30 +122,30 @@
     <!-- ============ LEVEL SELECT ============ -->
     <section class="screen" id="screen-level">
       <div class="card">
-        <h2 class="section-title">🎚️ Choose Your Challenge</h2>
-        <p class="muted">Same vault, two difficulty modes. Pick the one that suits you.</p>
+        <h2 class="section-title" data-i18n="level.title">Choose Your Challenge</h2>
+        <p class="muted" data-i18n="level.subtitle">Same vault, two difficulty modes. Pick the one that suits you.</p>
         <div class="level-grid">
           <button class="level-card" data-level="easy">
-            <div class="level-icon">🌱</div><h3>Easy</h3>
-            <span class="level-cta">Start →</span>
+            <div class="level-icon">🌱</div><h3 data-i18n="level.easy">Easy</h3>
+            <span class="level-cta" data-i18n="level.start">Start →</span>
           </button>
           <button class="level-card" data-level="normal">
-            <div class="level-icon">⚡</div><h3>Normal</h3>
-            <span class="level-cta">Start →</span>
+            <div class="level-icon">⚡</div><h3 data-i18n="level.normal">Normal</h3>
+            <span class="level-cta" data-i18n="level.start">Start →</span>
           </button>
         </div>
-        <div class="actions"><button type="button" class="btn btn-ghost" data-goto="avatar">← Back</button></div>
+        <div class="actions"><button type="button" class="btn btn-ghost" data-goto="avatar" data-i18n="common.back">← Back</button></div>
       </div>
     </section>
 
     <!-- ============ GAME (walk-around world) ============ -->
     <section class="screen" id="screen-game">
       <div class="game-topbar">
-        <div class="tb-item"><span>Room</span><b><span id="q-current">1</span>/<span id="q-total">10</span></b></div>
-        <div class="tb-item"><span>⏱ Time</span><b id="timer">00:00</b></div>
-        <div class="tb-item"><span>🔓 Keys</span><b id="score">0</b></div>
+        <div class="tb-item"><span data-i18n="game.room">Room</span><b><span id="q-current">1</span>/<span id="q-total">5</span></b></div>
+        <div class="tb-item"><span data-i18n="game.time">⏱ Time</span><b id="timer">00:00</b></div>
+        <div class="tb-item"><span data-i18n="game.keys">🔓 Keys</span><b id="score">0</b></div>
       </div>
-      <div class="objective" id="objective">Walk onto the glowing terminal to face its puzzle and unlock the door! 🚪</div>
+      <div class="objective" id="objective" data-i18n="game.objective">Walk onto the glowing terminal to face its puzzle and unlock the door! 🚪</div>
 
       <div class="world-wrap" id="world-wrap">
         <canvas id="world"></canvas>
@@ -142,7 +153,7 @@
         <button class="interact-btn" id="interact-btn" hidden>❓<small>Solve</small></button>
         <div class="confetti-layer" id="confetti-layer" aria-hidden="true"></div>
       </div>
-      <p class="controls-hint">🕹️ Drag the joystick (or tap where you want to walk). On a computer: arrow keys / WASD.</p>
+      <p class="controls-hint" data-i18n="game.controls">🕹️ Drag the joystick (or tap where you want to walk). On a computer: arrow keys / WASD.</p>
 
       <!-- puzzle modal -->
       <div class="puzzle-modal" id="puzzle-modal" hidden>
@@ -155,7 +166,7 @@
             <p class="feedback-body" id="feedback-body"></p>
             <button class="btn btn-primary btn-bounce" id="btn-next">Continue →</button>
           </div>
-          <div class="game-foot"><button class="btn btn-ghost btn-sm" id="btn-hint">💡 Hint</button><p class="hint-text" id="hint-text" hidden></p></div>
+          <div class="game-foot"><button class="btn btn-ghost btn-sm" id="btn-hint" data-i18n="game.hint">💡 Hint</button><p class="hint-text" id="hint-text" hidden></p></div>
         </div>
       </div>
     </section>
@@ -168,18 +179,18 @@
           <h2 class="title-pop small" id="result-title">You Escaped!</h2>
           <p class="lede" id="result-lede"></p>
           <div class="result-stats">
-            <div class="stat"><span class="stat-num" id="stat-score">0/5</span><span class="stat-label">Keys (1st try)</span></div>
-            <div class="stat"><span class="stat-num" id="stat-time">00:00</span><span class="stat-label">Time</span></div>
-            <div class="stat"><span class="stat-num" id="stat-level">Easy</span><span class="stat-label">Mode</span></div>
+            <div class="stat"><span class="stat-num" id="stat-score">0/5</span><span class="stat-label" data-i18n="result.keys">Keys (1st try)</span></div>
+            <div class="stat"><span class="stat-num" id="stat-time">00:00</span><span class="stat-label" data-i18n="result.time">Time</span></div>
+            <div class="stat"><span class="stat-num" id="stat-level">Easy</span><span class="stat-label" data-i18n="result.mode">Mode</span></div>
           </div>
         </div>
 
         <hr class="divider" />
-        <h3 class="section-title">💬 Programme Feedback</h3>
-        <p class="muted">Please complete to finish. <i style="color:var(--pink);font-style:normal">*</i> required.</p>
+        <h3 class="section-title" data-i18n="fb.title">Programme Feedback</h3>
+        <p class="muted"><span data-i18n="fb.subtitle">Please complete to finish.</span> <i style="color:var(--pink);font-style:normal">*</i> <span data-i18n="fb.required">required</span>.</p>
         <form id="feedback-form" novalidate>
           <fieldset class="likert">
-            <legend>Overall Satisfaction in the programme <i>*</i></legend>
+            <legend><span data-i18n="fb.q1">Overall Satisfaction in the programme</span> <i>*</i></legend>
             <div class="scale">
               <label><input type="radio" name="satisfaction" value="1" required /><span>1</span></label>
               <label><input type="radio" name="satisfaction" value="2" /><span>2</span></label>
@@ -187,11 +198,11 @@
               <label><input type="radio" name="satisfaction" value="4" /><span>4</span></label>
               <label><input type="radio" name="satisfaction" value="5" /><span>5</span></label>
             </div>
-            <div class="scale-ends"><span>Not satisfied</span><span>Very satisfied</span></div>
+            <div class="scale-ends"><span data-i18n="fb.notSat">Not satisfied</span><span data-i18n="fb.verySat">Very satisfied</span></div>
           </fieldset>
 
           <fieldset class="likert">
-            <legend>Programme is useful in building digital skills or addressing digital needs <i>*</i></legend>
+            <legend><span data-i18n="fb.q2">Programme is useful in building digital skills or addressing digital needs</span> <i>*</i></legend>
             <div class="scale">
               <label><input type="radio" name="usefulness" value="1" required /><span>1</span></label>
               <label><input type="radio" name="usefulness" value="2" /><span>2</span></label>
@@ -199,11 +210,11 @@
               <label><input type="radio" name="usefulness" value="4" /><span>4</span></label>
               <label><input type="radio" name="usefulness" value="5" /><span>5</span></label>
             </div>
-            <div class="scale-ends"><span>Strongly disagree</span><span>Strongly agree</span></div>
+            <div class="scale-ends"><span data-i18n="fb.disagree">Strongly disagree</span><span data-i18n="fb.agree">Strongly agree</span></div>
           </fieldset>
 
           <fieldset class="likert">
-            <legend>Motivated to continue learning about digital and embrace digital after programme <i>*</i></legend>
+            <legend><span data-i18n="fb.q3">Motivated to continue learning about digital and embrace digital after programme</span> <i>*</i></legend>
             <div class="scale">
               <label><input type="radio" name="motivation" value="1" required /><span>1</span></label>
               <label><input type="radio" name="motivation" value="2" /><span>2</span></label>
@@ -211,30 +222,30 @@
               <label><input type="radio" name="motivation" value="4" /><span>4</span></label>
               <label><input type="radio" name="motivation" value="5" /><span>5</span></label>
             </div>
-            <div class="scale-ends"><span>Strongly disagree</span><span>Strongly agree</span></div>
+            <div class="scale-ends"><span data-i18n="fb.disagree">Strongly disagree</span><span data-i18n="fb.agree">Strongly agree</span></div>
           </fieldset>
 
           <fieldset class="radio-group">
-            <legend>I would apply what I have learnt from the programme <i>*</i></legend>
+            <legend><span data-i18n="fb.q4">I would apply what I have learnt from the programme</span> <i>*</i></legend>
             <div class="scale yn">
-              <label><input type="radio" name="wouldApply" value="Yes" required /><span>Yes</span></label>
-              <label><input type="radio" name="wouldApply" value="No" /><span>No</span></label>
+              <label><input type="radio" name="wouldApply" value="Yes" required /><span data-i18n="fb.yes">Yes</span></label>
+              <label><input type="radio" name="wouldApply" value="No" /><span data-i18n="fb.no">No</span></label>
             </div>
           </fieldset>
 
           <fieldset class="radio-group">
-            <legend>I am interested in signing up for other digital-related programme <i>*</i></legend>
+            <legend><span data-i18n="fb.q5">I am interested in signing up for other digital-related programme</span> <i>*</i></legend>
             <div class="scale yn">
-              <label><input type="radio" name="interestedOther" value="Yes" required /><span>Yes</span></label>
-              <label><input type="radio" name="interestedOther" value="No" /><span>No</span></label>
+              <label><input type="radio" name="interestedOther" value="Yes" required /><span data-i18n="fb.yes">Yes</span></label>
+              <label><input type="radio" name="interestedOther" value="No" /><span data-i18n="fb.no">No</span></label>
             </div>
           </fieldset>
 
-          <label class="field"><span>What other areas related to digital are you keen to learn about? <i>*</i></span><textarea name="keenAreas" rows="2" required></textarea></label>
-          <label class="field"><span>Please provide any other comments you have: <i>*</i></span><textarea name="otherComments" rows="3" required></textarea></label>
+          <label class="field"><span><span data-i18n="fb.q6">What other areas related to digital are you keen to learn about?</span> <i>*</i></span><textarea name="keenAreas" rows="2" required></textarea></label>
+          <label class="field"><span><span data-i18n="fb.q7">Please provide any other comments you have:</span> <i>*</i></span><textarea name="otherComments" rows="3" required></textarea></label>
 
           <p class="form-error" id="feedback-error" hidden></p>
-          <div class="actions"><button type="submit" class="btn btn-primary btn-lg">Submit &amp; Finish →</button></div>
+          <div class="actions"><button type="submit" class="btn btn-primary btn-lg" data-i18n="fb.submit">Submit &amp; Finish →</button></div>
         </form>
       </div>
     </section>
@@ -243,14 +254,14 @@
     <section class="screen" id="screen-thanks">
       <div class="card hero">
         <div class="result-emoji">🙏</div>
-        <h2 class="title-pop small">Thank You!</h2>
+        <h2 class="title-pop small" data-i18n="thanks.title">Thank You!</h2>
         <p class="lede" id="thanks-status">Your responses have been recorded.</p>
-        <p class="muted">Stay alert, stay safe — and share what you learned with friends and family.</p>
-        <button class="btn btn-primary btn-lg btn-bounce" id="btn-play-again">Play Again (New Player)</button>
+        <p class="muted" data-i18n="thanks.muted">Stay alert, stay safe — and share what you learned with friends and family.</p>
+        <button class="btn btn-primary btn-lg btn-bounce" id="btn-play-again" data-i18n="thanks.again">Play Again (New Player)</button>
       </div>
     </section>
 
-    <!-- ============ ADMIN ============ -->
+    <!-- ============ ADMIN (organiser only, via ?admin) ============ -->
     <section class="screen" id="screen-admin">
       <div class="card">
         <h2 class="section-title">🔐 Organiser Dashboard</h2>
@@ -274,7 +285,8 @@
     <span>Cyber Escape • Digital Safety Roadshow</span>
   </footer>
 
-  <script src="assets/js/data.js?v=13"></script>
-  <script src="assets/js/app.js?v=13"></script>
+  <script src="assets/js/i18n.js?v=14"></script>
+  <script src="assets/js/data.js?v=14"></script>
+  <script src="assets/js/app.js?v=14"></script>
 </body>
 </html>

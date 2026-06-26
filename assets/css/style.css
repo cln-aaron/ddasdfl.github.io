@@ -97,6 +97,11 @@ body {
 .scale.yn span { min-width: 0; padding: 0 26px; }
 .scale-ends { display: flex; justify-content: space-between; font-size: 11px; color: var(--ink-soft); margin-top: 4px; max-width: 290px; }
 
+/* language select */
+.lang-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 24px 0 6px; }
+.lang-btn { font-size: 19px; padding: 18px 14px; }
+.lang-btn.active { outline: 4px solid var(--cyan); outline-offset: 2px; }
+
 /* avatar select */
 .avatar-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin: 20px 0; }
 .avatar-pick { background: var(--cream); border: 4px solid #ece6fa; border-radius: 18px; padding: 14px 6px 12px; cursor: pointer; text-align: center; transition: transform .12s, border-color .15s, box-shadow .15s; box-shadow: 0 5px 0 #ddd6f2; }
