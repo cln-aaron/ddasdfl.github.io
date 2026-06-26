@@ -178,7 +178,7 @@ $$(".level-card").forEach(c => c.addEventListener("click", () => {
 /* =====================================================================
    9) THE WORLD ENGINE
    ===================================================================== */
-const TILE = 46, ROOM_W = 9, ROOM_H = 8;
+const TILE = 52, ROOM_W = 9, ROOM_H = 8;
 let world = null, raf = null, lastStep = 0;
 const input = { x: 0, y: 0 };          // movement vector (from joystick/keys/tap)
 let moveTarget = null;                  // tap-to-move target (world px)
@@ -447,7 +447,7 @@ function loop(now) {
       const mag = Math.hypot(vx, vy);
       if (mag > 0) {
         const nx = vx/mag, ny = vy/mag;
-        const SPEED = 3.0;
+        const SPEED = 3.5;
         if (Math.abs(vx) > 0.05) world.player.facing = vx < 0 ? -1 : 1;
         tryMove(nx * SPEED * Math.min(mag,1), ny * SPEED * Math.min(mag,1));
         if (now - lastStep > 230) { sfx.step(); lastStep = now; }
