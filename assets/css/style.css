@@ -124,8 +124,20 @@ body {
 .level-cta { display: inline-block; margin-top: 8px; color: var(--purple); font-weight: 700; }
 
 /* ===== GAME WORLD ===== */
-.game-topbar { display: flex; justify-content: space-around; gap: 8px; background: #fff; border: 3px solid #fff; border-radius: 16px; padding: 8px 12px; box-shadow: 0 6px 0 rgba(90,63,214,.18); margin-bottom: 10px; }
+.game-topbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: #fff; border: 3px solid #fff; border-radius: 16px; padding: 8px 12px; box-shadow: 0 6px 0 rgba(90,63,214,.18); margin-bottom: 10px; }
+.tb-stats { flex: 1; display: flex; justify-content: space-around; gap: 8px; }
 .tb-item { display: flex; flex-direction: column; align-items: center; }
+
+/* exit-to-home button */
+.exit-btn { display: flex; align-items: center; gap: 6px; flex-shrink: 0; background: #f3eeff; color: var(--purple-d); border: 2px solid #e0d8f5; border-radius: 12px; padding: 8px 12px; font-family: "Baloo 2", sans-serif; font-weight: 700; font-size: 14px; cursor: pointer; box-shadow: 0 4px 0 #d7cdf0; transition: transform .08s, box-shadow .08s, filter .15s; }
+.exit-btn:hover { filter: brightness(1.02); }
+.exit-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #d7cdf0; }
+.exit-ico { font-size: 17px; line-height: 1; }
+
+.exit-card { text-align: center; max-width: 440px; }
+.exit-emoji { font-size: 56px; line-height: 1; margin-bottom: 6px; }
+.exit-card .section-title { margin-bottom: 8px; }
+.exit-actions { justify-content: center; margin-top: 22px; }
 .tb-item span { font-size: 11px; color: var(--ink-soft); font-weight: 600; }
 .tb-item b { font-family: "Baloo 2"; font-size: 18px; color: var(--purple-d); }
 
@@ -238,5 +250,7 @@ body {
   .actions { justify-content: stretch; }
   .actions .btn { flex: 1; }
   .world-wrap { height: calc(100dvh - 300px); min-height: 320px; }
+  .exit-txt { display: none; }        /* icon-only exit on small phones */
+  .exit-btn { padding: 8px 10px; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; } }

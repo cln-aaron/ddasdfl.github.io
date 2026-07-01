@@ -586,6 +586,37 @@ function applyKeys() {
 /* interact button */
 $("#interact-btn").addEventListener("click", () => { if (state.nearTerminal) openPuzzle(state.nearTerminal.r); });
 
+/* exit-to-home (leave the game without completing) */
+$("#btn-exit").addEventListener("click", () => {
+  sfx.click();
+  state.paused = true; input.x = 0; input.y = 0; moveTarget = null;
+  $("#exit-modal").hidden = false;
+});
+$("#btn-exit-cancel").addEventListener("click", () => {
+  sfx.click();
+  $("#exit-modal").hidden = true;
+  state.paused = false;                 // resume walking
+});
+$("#btn-exit-confirm").addEventListener("click", () => {
+  sfx.click();
+  $("#exit-modal").hidden = true;
+  exitToHome();
+});
+function exitToHome() {
+  cancelAnimationFrame(raf); raf = null;
+  clearInterval(state.timerId);
+  music.stop();
+  state.paused = false; state.player = null; state.avatar = null; state.level = null;
+  input.x = 0; input.y = 0; moveTarget = null;
+  $("#register-form").reset(); $("#feedback-form").reset();
+  const cc = $("#consent-check"); if (cc) cc.checked = false;
+  $$(".avatar-pick").forEach(x => x.classList.remove("selected"));
+  $("#btn-avatar-next").disabled = true;
+  $("#puzzle-modal").hidden = true;
+  $("#objective").textContent = t("game.objective");
+  showScreen("language");               // back to the first page
+}
+
 /* =====================================================================
    13) PUZZLE MODAL
    ===================================================================== */

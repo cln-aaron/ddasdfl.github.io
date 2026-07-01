@@ -104,7 +104,13 @@ const I18N = {
     "thanks.ok": "✅ Your responses have been recorded. Thank you!",
     "thanks.saved": "✅ Saved on this device. (Online submission unavailable right now — organisers will sync it later.)",
     "thanks.muted": "Stay alert, stay safe — and share what you learned with friends and family.",
-    "thanks.again": "Play Again (New Player)"
+    "thanks.again": "Play Again (New Player)",
+
+    "exit.button": "Exit",
+    "exit.title": "Leave the game?",
+    "exit.body": "Your progress won't be saved. Return to the start?",
+    "exit.confirm": "Exit to Home",
+    "exit.cancel": "Keep Playing"
   },
 
   /* --------------------------- 简体中文 ------------------------------ */
@@ -205,7 +211,13 @@ const I18N = {
     "thanks.ok": "✅ 你的回复已记录。谢谢！",
     "thanks.saved": "✅ 已保存在此设备上。（暂时无法在线提交——主办方稍后会同步。）",
     "thanks.muted": "保持警惕，注意安全——把你学到的分享给亲友。",
-    "thanks.again": "再玩一次（新玩家）"
+    "thanks.again": "再玩一次（新玩家）",
+
+    "exit.button": "退出",
+    "exit.title": "要退出游戏吗？",
+    "exit.body": "你的进度将不会保存。要返回首页吗？",
+    "exit.confirm": "返回首页",
+    "exit.cancel": "继续游戏"
   },
 
   /* ------------------------ BAHASA MELAYU ---------------------------- */
@@ -306,7 +318,13 @@ const I18N = {
     "thanks.ok": "✅ Maklum balas anda telah direkodkan. Terima kasih!",
     "thanks.saved": "✅ Disimpan pada peranti ini. (Penghantaran dalam talian tidak tersedia sekarang — penganjur akan menyegerakkannya kemudian.)",
     "thanks.muted": "Sentiasa berwaspada, kekal selamat — dan kongsi apa yang anda pelajari dengan keluarga dan rakan.",
-    "thanks.again": "Main Semula (Pemain Baru)"
+    "thanks.again": "Main Semula (Pemain Baru)",
+
+    "exit.button": "Keluar",
+    "exit.title": "Keluar dari permainan?",
+    "exit.body": "Kemajuan anda tidak akan disimpan. Kembali ke mula?",
+    "exit.confirm": "Keluar ke Laman Utama",
+    "exit.cancel": "Teruskan Bermain"
   },
 
   /* ----------------------------- தமிழ் ------------------------------- */
@@ -407,6 +425,12 @@ const I18N = {
     "thanks.ok": "✅ உங்கள் பதில்கள் பதிவு செய்யப்பட்டன. நன்றி!",
     "thanks.saved": "✅ இந்தச் சாதனத்தில் சேமிக்கப்பட்டது. (இப்போது ஆன்லைன் சமர்ப்பிப்பு கிடைக்கவில்லை — ஏற்பாட்டாளர்கள் பின்னர் ஒத்திசைப்பார்கள்.)",
     "thanks.muted": "எச்சரிக்கையாக இருங்கள், பாதுகாப்பாக இருங்கள் — நீங்கள் கற்றதை குடும்பத்தினருடனும் நண்பர்களுடனும் பகிருங்கள்.",
-    "thanks.again": "மீண்டும் விளையாடு (புதிய வீரர்)"
+    "thanks.again": "மீண்டும் விளையாடு (புதிய வீரர்)",
+
+    "exit.button": "வெளியேறு",
+    "exit.title": "விளையாட்டிலிருந்து வெளியேறவா?",
+    "exit.body": "உங்கள் முன்னேற்றம் சேமிக்கப்படாது. தொடக்கத்திற்குத் திரும்பவா?",
+    "exit.confirm": "முகப்புக்குச் செல்",
+    "exit.cancel": "தொடர்ந்து விளையாடு"
   }
 };

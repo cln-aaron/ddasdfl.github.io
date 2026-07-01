@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css?v=14" />
+  <link rel="stylesheet" href="assets/css/style.css?v=15" />
 </head>
 <body>
   <div class="bg-sky" aria-hidden="true"></div>
@@ -141,9 +141,12 @@
     <!-- ============ GAME (walk-around world) ============ -->
     <section class="screen" id="screen-game">
       <div class="game-topbar">
-        <div class="tb-item"><span data-i18n="game.room">Room</span><b><span id="q-current">1</span>/<span id="q-total">5</span></b></div>
-        <div class="tb-item"><span data-i18n="game.time">⏱ Time</span><b id="timer">00:00</b></div>
-        <div class="tb-item"><span data-i18n="game.keys">🔓 Keys</span><b id="score">0</b></div>
+        <button type="button" class="exit-btn" id="btn-exit"><span class="exit-ico">🏠</span><span class="exit-txt" data-i18n="exit.button">Exit</span></button>
+        <div class="tb-stats">
+          <div class="tb-item"><span data-i18n="game.room">Room</span><b><span id="q-current">1</span>/<span id="q-total">5</span></b></div>
+          <div class="tb-item"><span data-i18n="game.time">⏱ Time</span><b id="timer">00:00</b></div>
+          <div class="tb-item"><span data-i18n="game.keys">🔓 Keys</span><b id="score">0</b></div>
+        </div>
       </div>
       <div class="objective" id="objective" data-i18n="game.objective">Walk onto the glowing terminal to face its puzzle and unlock the door! 🚪</div>
 
@@ -167,6 +170,19 @@
             <button class="btn btn-primary btn-bounce" id="btn-next">Continue →</button>
           </div>
           <div class="game-foot"><button class="btn btn-ghost btn-sm" id="btn-hint" data-i18n="game.hint">💡 Hint</button><p class="hint-text" id="hint-text" hidden></p></div>
+        </div>
+      </div>
+
+      <!-- exit confirmation -->
+      <div class="puzzle-modal" id="exit-modal" hidden>
+        <div class="puzzle-card exit-card">
+          <div class="exit-emoji">🚪</div>
+          <h3 class="section-title" data-i18n="exit.title">Leave the game?</h3>
+          <p class="muted" data-i18n="exit.body">Your progress won't be saved. Return to the start?</p>
+          <div class="actions exit-actions">
+            <button type="button" class="btn btn-ghost" id="btn-exit-confirm" data-i18n="exit.confirm">Exit to Home</button>
+            <button type="button" class="btn btn-primary btn-bounce" id="btn-exit-cancel" data-i18n="exit.cancel">Keep Playing</button>
+          </div>
         </div>
       </div>
     </section>
@@ -285,8 +301,8 @@
     <span>Cyber Escape • Digital Safety Roadshow</span>
   </footer>
 
-  <script src="assets/js/i18n.js?v=14"></script>
-  <script src="assets/js/data.js?v=14"></script>
-  <script src="assets/js/app.js?v=14"></script>
+  <script src="assets/js/i18n.js?v=15"></script>
+  <script src="assets/js/data.js?v=15"></script>
+  <script src="assets/js/app.js?v=15"></script>
 </body>
 </html>
